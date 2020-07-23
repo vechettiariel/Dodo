@@ -106,8 +106,6 @@ CREATE TABLE TAXCUSTCATEGORIES (
 );
 CREATE UNIQUE INDEX TAXCUSTCAT_NAME_INX ON TAXCUSTCATEGORIES(NAME);
 
-INSERT INTO TAXCUSTCATEGORIES (ID, NAME) VALUES('IVA', 'Descrimina en Ticket');
-
 CREATE TABLE CUSTOMERS (
     ID VARCHAR NOT NULL,
     SEARCHKEY VARCHAR NOT NULL,
@@ -181,8 +179,8 @@ CREATE TABLE TAXES (
 );
 CREATE UNIQUE INDEX TAXES_NAME_INX ON TAXES(NAME);
 
-INSERT INTO taxes (id, name, validfrom, category, custcategory, parentid, rate, ratecascade, rateorder, codtax) VALUES ('002', 'Iva 21%', '2012-08-29 00:00:00', '002', 'IVA', NULL, 0.21, false, NULL, 5);
-INSERT INTO taxes (id, name, validfrom, category, custcategory, parentid, rate, ratecascade, rateorder, codtax) VALUES ('001', 'Iva 10,5%', '2012-08-29 00:00:00', '001', 'IVA', NULL, 0.105, false, NULL, 4);
+INSERT INTO taxes (id, name, validfrom, category, custcategory, parentid, rate, ratecascade, rateorder, codtax) VALUES ('002', 'Iva 21%', '2012-08-29 00:00:00', '002', NULL, NULL, 0.21, false, NULL, 5);
+INSERT INTO taxes (id, name, validfrom, category, custcategory, parentid, rate, ratecascade, rateorder, codtax) VALUES ('001', 'Iva 10,5%', '2012-08-29 00:00:00', '001', NULL, NULL, 0.105, false, NULL, 4);
 INSERT INTO taxes (id, name, validfrom, category, custcategory, parentid, rate, ratecascade, rateorder, codtax) VALUES ('000', 'Tax Exento', '2001-01-01 00:00:00', '000', NULL, NULL, 0, false, NULL, 2);
 
 CREATE TABLE ATTRIBUTE (
