@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<loginTicketRequest version="1.0"><header><source>SERIALNUMBER=CUIT 20286670149, CN=dodo</source><destination>cn=wsaahomo,o=afip,c=ar,serialNumber=CUIT 33693450239</destination><uniqueId>1595386790</uniqueId><generationTime>2020-07-21T23:59:50.381-03:00</generationTime><expirationTime>2020-07-22T00:59:50.382-03:00</expirationTime></header><service>ws_sr_padron_a4</service></loginTicketRequest>
