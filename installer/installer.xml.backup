@@ -1,0 +1,187 @@
+<project>
+    <shortName>dodopos</shortName>
+    <fullName>Dodo POS</fullName>
+    <version>2.30.2.1-beta</version>
+    <readmeFile>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/README</readmeFile>
+    <licenseFile>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/licensing/gpl-3.0.txt</licenseFile>
+    <leftImage>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/installer/images/left2.png</leftImage>
+    <logoImage>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/installer/images/icon.png</logoImage>
+    <splashImage>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/installer/images/splash.png</splashImage>
+    <defaultLanguage>es_AR</defaultLanguage>
+    <allowLanguageSelection>1</allowLanguageSelection>
+    <componentList>
+        <component>
+            <name>default</name>
+            <description>Default Component</description>
+            <canBeEdited>1</canBeEdited>
+            <selected>1</selected>
+            <show>1</show>
+            <desktopShortcutList>
+                <shortcut>
+                    <comment>Dodo POS is a point of sale designed for touch screens</comment>
+                    <exec>sh ${installdir}/start.sh</exec>
+                    <icon>${installdir}/dodo-logo-128.png</icon>
+                    <name>Dodo POS</name>
+                    <path>${installdir}</path>
+                    <platforms>all</platforms>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/start.bat</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}/dodo-logo.ico</windowsIcon>
+                    <windowsPath>${installdir}</windowsPath>
+                </shortcut>
+            </desktopShortcutList>
+            <folderList>
+                <folder>
+                    <description>DEB1</description>
+                    <destination>/usr/share/icons</destination>
+                    <name>openbravoposiscon</name>
+                    <platforms>linux</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/installer/images/openbravopos.png</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>DEB2</description>
+                    <destination>/usr/share/applications</destination>
+                    <name>openbravoposdesktop</name>
+                    <platforms>linux</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/installer/openbravopos.desktop</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>DEB3</description>
+                    <destination>/usr/bin/</destination>
+                    <name>openbravoposexec</name>
+                    <platforms>linux</platforms>
+                    <distributionFileList>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/installer/openbravopos</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+                <folder>
+                    <description>Program Files</description>
+                    <destination>${installdir}</destination>
+                    <name>programfiles</name>
+                    <platforms>all</platforms>
+                    <distributionFileList>
+                        <distributionDirectory>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/reports</origin>
+                        </distributionDirectory>
+                        <distributionDirectory>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/locales</origin>
+                        </distributionDirectory>
+                        <distributionDirectory>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/licensing</origin>
+                        </distributionDirectory>
+                        <distributionDirectory>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/lib</origin>
+                        </distributionDirectory>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/build/jar/dodo.jar</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/README</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/dodo-logo-128.png</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/dodo-logo.ico</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/start.bat</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/start.sh</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/configure.bat</origin>
+                        </distributionFile>
+                        <distributionFile>
+                            <origin>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/configure.sh</origin>
+                        </distributionFile>
+                    </distributionFileList>
+                </folder>
+            </folderList>
+            <startMenuShortcutList>
+                <startMenuShortcut>
+                    <comment>Dodo POS is a point of sale designed for touch screens</comment>
+                    <name>Dodo POS</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/start.bat</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}/openbravo-logo.ico</windowsIcon>
+                    <windowsPath>${installdir}</windowsPath>
+                </startMenuShortcut>
+                <startMenuShortcut>
+                    <comment>Configure Dodo POS</comment>
+                    <name>Dodo POS configuration</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/configure.bat</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}/openbravo-logo.ico</windowsIcon>
+                    <windowsPath>${installdir}</windowsPath>
+                </startMenuShortcut>
+                <startMenuShortcut>
+                    <comment>Uninstall ${product_fullname}</comment>
+                    <name>Uninstall ${product_fullname}</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon></windowsIcon>
+                    <windowsPath>${installdir}/</windowsPath>
+                </startMenuShortcut>
+            </startMenuShortcutList>
+        </component>
+    </componentList>
+    <description>Openbravo POS is a point of sale designed for touch screens</description>
+    <enableRollback>1</enableRollback>
+    <enableTimestamp>1</enableTimestamp>
+    <outputDirectory>F:/ariel/Documents/GuenoaSistemas/repositorios/Dodo-2.30.2.1-beta/build/installerpos</outputDirectory>
+    <release>3</release>
+    <requireInstallationByRootUser>1</requireInstallationByRootUser>
+    <summary>POS</summary>
+    <vendor>Cooperativa de Trabajo Guenoa Ltda</vendor>
+    <parameterList>
+        <directoryParameter>
+            <name>installdir</name>
+            <description>Installer.Parameter.installdir.description</description>
+            <explanation>Installer.Parameter.installdir.explanation</explanation>
+            <value>${platform_install_prefix}/${product_shortname}-${product_version}</value>
+            <default>${platform_install_prefix}/${product_shortname}-${product_version}</default>
+            <allowEmptyValue>0</allowEmptyValue>
+            <ask>yes</ask>
+            <cliOptionName>prefix</cliOptionName>
+            <mustBeWritable>yes</mustBeWritable>
+            <mustExist>0</mustExist>
+            <width>30</width>
+        </directoryParameter>
+    </parameterList>
+    <platformOptionsList>
+        <platformOptions>
+            <description>Openbravo POS is a point of sale designed for touch screens</description>
+            <platform>debian</platform>
+            <release>1</release>
+            <summary>POS</summary>
+            <vendor>Openbravo</vendor>
+        </platformOptions>
+        <platformOptions>
+            <platform>windows</platform>
+        </platformOptions>
+        <platformOptions>
+            <platform>linux-x64</platform>
+        </platformOptions>
+    </platformOptionsList>
+</project>
+

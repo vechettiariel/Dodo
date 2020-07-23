@@ -1,0 +1,234 @@
+//    Openbravo POS is a point of sales application designed for touch screens.
+//    Copyright (C) 2007-2009 Openbravo, S.L.
+//    http://www.openbravo.com/product/pos
+//
+//    This file is part of Openbravo POS.
+//
+//    Openbravo POS is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Openbravo POS is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+package com.openbravo.pos.mant;
+
+import com.openbravo.basic.BasicException;
+import com.openbravo.data.gui.ComboBoxValModel;
+import com.openbravo.data.loader.SentenceList;
+import com.openbravo.data.user.DirtyManager;
+import com.openbravo.data.user.EditorRecord;
+import com.openbravo.format.Formats;
+import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.sales.DataLogicSales;
+import java.awt.Component;
+import java.util.UUID;
+import javax.swing.*;
+
+/**
+ *
+ * @author adrianromero
+ */
+public final class PlacesEditor extends JPanel implements EditorRecord {
+
+    private SentenceList m_sentfloor;
+    private ComboBoxValModel m_FloorModel;
+
+    /**
+     * Creates new form PlacesEditor
+     */
+    public PlacesEditor(DataLogicSales dlSales, DirtyManager dirty) {
+        initComponents();
+
+        m_sentfloor = dlSales.getFloorsList();
+        m_FloorModel = new ComboBoxValModel();
+
+        m_jCodigo.getDocument().addDocumentListener(dirty);
+        m_jName.getDocument().addDocumentListener(dirty);
+        m_jFloor.addActionListener(dirty);
+        m_jX.getDocument().addDocumentListener(dirty);
+        m_jY.getDocument().addDocumentListener(dirty);
+
+        writeValueEOF();
+    }
+
+    public void activate() throws BasicException {
+
+        m_FloorModel = new ComboBoxValModel(m_sentfloor.list());
+        m_jFloor.setModel(m_FloorModel);
+    }
+
+    @Override
+    public void refresh() {
+    }
+
+    @Override
+    public void writeValueEOF() {
+
+        m_jCodigo.setText(null);
+        m_jName.setText(null);
+        m_FloorModel.setSelectedKey(null);
+        m_jX.setText(null);
+        m_jY.setText(null);
+
+        m_jCodigo.setEnabled(false);
+        m_jName.setEnabled(false);
+        m_jFloor.setEnabled(false);
+        m_jX.setEnabled(false);
+        m_jY.setEnabled(false);
+    }
+
+    @Override
+    public void writeValueInsert() {
+
+        m_jCodigo.setText(null);
+        m_jName.setText(null);
+        m_FloorModel.setSelectedKey(null);
+        m_jX.setText(null);
+        m_jY.setText(null);
+
+        m_jCodigo.setEnabled(true);
+        m_jName.setEnabled(true);
+        m_jFloor.setEnabled(true);
+        m_jX.setEnabled(true);
+        m_jY.setEnabled(true);
+    }
+
+    @Override
+    public void writeValueDelete(Object value) {
+
+        Object[] place = (Object[]) value;
+        m_jCodigo.setText(Formats.STRING.formatValue(place[0]));
+        m_jName.setText(Formats.STRING.formatValue(place[1]));
+        m_jX.setText(Formats.INT.formatValue(place[2]));
+        m_jY.setText(Formats.INT.formatValue(place[3]));
+        m_FloorModel.setSelectedKey(place[4]);
+
+        m_jCodigo.setEnabled(false);
+        m_jName.setEnabled(false);
+        m_jFloor.setEnabled(false);
+        m_jX.setEnabled(false);
+        m_jY.setEnabled(false);
+    }
+
+    @Override
+    public void writeValueEdit(Object value) {
+
+        Object[] place = (Object[]) value;
+        m_jCodigo.setText(Formats.STRING.formatValue(place[0]));
+        m_jName.setText(Formats.STRING.formatValue(place[1]));
+        m_jX.setText(Formats.INT.formatValue(place[2]));
+        m_jY.setText(Formats.INT.formatValue(place[3]));
+        m_FloorModel.setSelectedKey(place[4]);
+
+        m_jCodigo.setEnabled(false);
+        m_jName.setEnabled(true);
+        m_jFloor.setEnabled(true);
+        m_jX.setEnabled(true);
+        m_jY.setEnabled(true);
+    }
+
+    @Override
+    public Object createValue() throws BasicException {
+        Object[] place = new Object[5];
+        place[0] = m_jCodigo.getText();
+        place[1] = m_jName.getText();
+        place[2] = Formats.INT.parseValue(m_jX.getText());
+        place[3] = Formats.INT.parseValue(m_jY.getText());
+        place[4] = m_FloorModel.getSelectedKey();
+        return place;
+    }
+
+    @Override
+    public Component getComponent() {
+        return this;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel2 = new javax.swing.JLabel();
+        m_jName = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        m_jX = new javax.swing.JTextField();
+        m_jY = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        m_jFloor = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        m_jCodigo = new javax.swing.JTextField();
+
+        jLabel2.setText(AppLocal.getIntString("Label.Name")); // NOI18N
+
+        jLabel3.setText(AppLocal.getIntString("label.placeposition")); // NOI18N
+
+        jLabel1.setText(AppLocal.getIntString("label.placefloor")); // NOI18N
+
+        jLabel4.setText(AppLocal.getIntString("Label.Codigo")); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(m_jX, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(m_jY, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_jFloor, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(76, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel4)
+                    .addComponent(m_jCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel2)
+                    .addComponent(m_jName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel1)
+                    .addComponent(m_jFloor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel3)
+                    .addComponent(m_jX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(m_jY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField m_jCodigo;
+    private javax.swing.JComboBox m_jFloor;
+    private javax.swing.JTextField m_jName;
+    private javax.swing.JTextField m_jX;
+    private javax.swing.JTextField m_jY;
+    // End of variables declaration//GEN-END:variables
+}
