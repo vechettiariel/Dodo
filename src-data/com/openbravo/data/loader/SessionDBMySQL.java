@@ -25,23 +25,29 @@ package com.openbravo.data.loader;
  */
 public class SessionDBMySQL implements SessionDB {
 
+    @Override
     public String TRUE() {
         return "TRUE";
     }
+    @Override
     public String FALSE() {
         return "FALSE";
     }
+    @Override
     public String INTEGER_NULL() {
         return "CAST(NULL AS UNSIGNED INTEGER)";
     }
+    @Override
     public String CHAR_NULL() {
         return "CAST(NULL AS CHAR)";
     }
 
+    @Override
     public String getName() {
         return "MySQL";
     }
 
+    @Override
     public SentenceFind getSequenceSentence(Session s, String sequence) {
         return new SequenceForMySQL(s, sequence);
     }

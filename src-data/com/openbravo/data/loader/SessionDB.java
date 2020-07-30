@@ -33,5 +33,11 @@ public interface SessionDB {
 
     public String getName();
 
+    /**
+     *
+     * @param s
+     * @param sequence
+     * @return
+     */
     public SentenceFind getSequenceSentence(Session s, String sequence);
 }
