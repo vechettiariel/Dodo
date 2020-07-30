@@ -30,7 +30,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.api.SubstanceSkin;
-import coop.guenoa.afip.util.Configuracion;
+
 
 /**
  *
@@ -78,29 +78,6 @@ public class StartPOS {
                 String svariant = config.getProperty("user.variant");
                 if (slang != null && !slang.equals("") && scountry != null && svariant != null) {
                     Locale.setDefault(new Locale(slang, scountry, svariant));
-                }
-
-                /*
-                Carga la configuracion de factura electronica
-                NoDefinido
-                WSFEv1-HOMO
-                WSFEv1
-                IMPRESORA-FISCAL
-                 */
-                String keystore = config.getProperty("wsafip.KEYSTORE");
-
-                if (!keystore.equals("IMPRESORA-FISCAL") && !keystore.equals("NoDefinido")) {
-
-                    Configuracion.CUIT = config.getProperty("wsafip.CUIT","");
-                    Configuracion.DEBUG = config.getProperty("wsafip.DEBUG","").equalsIgnoreCase("True");
-                    Configuracion.HOMOLOCION = config.getProperty("wsafip.HOMOLOCION","").equalsIgnoreCase("True");
-
-                    Configuracion.KEYSTORE = config.getProperty("wsafip.KEYSTORE","");
-                    Configuracion.KEYSTORE_PASS = config.getProperty("wsafip.KEYSTORE_PASS","");
-                    Configuracion.KEYSTORE_USER = config.getProperty("wsafip.KEYSTORE_USER","");
-
-                } else {
-
                 }
 
                 // Set the format patterns

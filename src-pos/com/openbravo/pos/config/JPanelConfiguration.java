@@ -57,7 +57,7 @@ public class JPanelConfiguration extends JPanel implements JPanelView {
         m_panelconfig.add(new JPanelConfigGeneral());
         m_panelconfig.add(new JPanelConfigLocale());
         m_panelconfig.add(new JPanelConfigPayment());
-        m_panelconfig.add(new JPanelConfigTPV());
+        m_panelconfig.add(new JPanelConfigValidation());
 
         // paneles auxiliares
         for (PanelConfig c : m_panelconfig) {

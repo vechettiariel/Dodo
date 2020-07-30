@@ -41,6 +41,7 @@ import com.openbravo.pos.taxes.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
 import com.openbravo.pos.ticket.TicketTaxInfo;
+import com.openbravo.pos.ticket.TicketType;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -158,6 +159,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 + "FROM PRODUCTS WHERE ISCOM = " + s.DB.TRUE() + " AND ?(QBF_FILTER) ORDER BY REFERENCE", new String[]{"NAME", "PRICEBUY", "PRICESELL", "CATEGORY", "CODE"}), new SerializerWriteBasic(new Datas[]{Datas.OBJECT, Datas.STRING, Datas.OBJECT, Datas.DOUBLE, Datas.OBJECT, Datas.DOUBLE, Datas.OBJECT, Datas.STRING, Datas.OBJECT, Datas.STRING}), ProductInfoExt.getSerializerRead());
     }
 
+    public final SentenceList getTicketType() {
+        return new StaticSentence(s, "SELECT ID, NAME FROM TICKETTYPE ORDER BY ID", null, (DataRead dr) -> new TicketType(dr.getInt(1), dr.getString(2)));
+    }
+
     //Tickets and Receipt list
     public SentenceList getTicketsList() {
         return new StaticSentence(s, new QBFBuilder(
@@ -250,7 +255,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     public final TicketInfo loadTicket(final int tickettype, final int ticketid) throws BasicException {
-        TicketInfo ticket = (TicketInfo) new PreparedSentence(s, "SELECT T.ID, T.TICKETTYPE, T.TICKETID, R.DATENEW, R.MONEY, R.ATTRIBUTES, P.ID, P.NAME, T.CUSTOMER FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID WHERE T.TICKETTYPE = ? AND T.TICKETID = ?", SerializerWriteParams.INSTANCE, new SerializerReadClass(TicketInfo.class))
+        TicketInfo ticket = (TicketInfo) new PreparedSentence(s, "SELECT T.ID, T.TYPE, T.NUMBER, R.DATENEW, R.MONEY, R.ATTRIBUTES, P.ID, P.NAME, T.CUSTOMER FROM RECEIPTS R JOIN TICKETS T ON R.ID = T.ID LEFT OUTER JOIN PEOPLE P ON T.PERSON = P.ID WHERE T.TICKETTYPE = ? AND T.TICKETID = ?", SerializerWriteParams.INSTANCE, new SerializerReadClass(TicketInfo.class))
                 .find(new DataParams() {
                     @Override
                     public void writeValues() throws BasicException {
@@ -278,22 +283,23 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             @Override
             public Object transact() throws BasicException {
 
-//                // Set Receipt Id
-//                if (ticket.getTicketId() == 0) {
-//                    switch (ticket.getTicketType()) {
-//                        case TicketInfo.RECEIPT_NORMAL:
-//                            ticket.setTicketId(getNextTicketIndex().intValue());
-//                            break;
-//                        case TicketInfo.RECEIPT_REFUND:
-//                            ticket.setTicketId(getNextTicketRefundIndex().intValue());
-//                            break;
-//                        case TicketInfo.RECEIPT_PAYMENT:
-//                            ticket.setTicketId(getNextTicketPaymentIndex().intValue());
-//                            break;
-//                        default:
-//                            throw new BasicException();
-//                    }
-//                }
+                // Set Receipt Id
+                /* if (ticket.getTicketId() == 0) {
+
+                    switch (ticket.getTicketType()) {
+                        case TicketInfo.RECEIPT_NORMAL:
+                            ticket.setTicketId(getNextTicketIndex().intValue());
+                            break;
+                        case TicketInfo.RECEIPT_REFUND:
+                            ticket.setTicketId(getNextTicketRefundIndex().intValue());
+                            break;
+                        case TicketInfo.RECEIPT_PAYMENT:
+                            ticket.setTicketId(getNextTicketPaymentIndex().intValue());
+                            break;
+                        default:
+                            throw new BasicException();
+                    }
+                }*/
                 // new receipt
                 new PreparedSentence(s, "INSERT INTO RECEIPTS (ID, MONEY, DATENEW, ATTRIBUTES) VALUES (?, ?, ?, ?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
                     @Override
@@ -312,12 +318,12 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
 
                 // new ticket
-                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TICKETTYPE, TICKETID, PERSON, CUSTOMER,VENDEDOR) VALUES (?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
+                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, NUMBER, PERSON, CUSTOMER,VENDEDOR) VALUES (?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
                     @Override
                     public void writeValues() throws BasicException {
                         setString(1, ticket.getId());
                         setInt(2, ticket.getTicketType().getId());
-                        setInt(3, ticket.getTicketId());
+                        setInt(3, ticket.getNumber());
                         setString(4, ticket.getUser().getId());
                         setString(5, ticket.getCustomerId());
                         setString(6, ticket.getVendedor().getId());
@@ -449,6 +455,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         t.execute();
     }
 
+    /*
     public final Integer getNextTicketIndex() throws BasicException {
         return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM").find();
     }
@@ -459,6 +466,28 @@ public class DataLogicSales extends BeanFactoryDataSingle {
 
     public final Integer getNextTicketPaymentIndex() throws BasicException {
         return (Integer) s.DB.getSequenceSentence(s, "TICKETSNUM_PAYMENT").find();
+    }
+     */
+    public int findNextTicketNumber(int type, int pointsale) throws BasicException {
+
+        PreparedSentence p = new PreparedSentence(s, "SELECT MAX(NUMBER) FROM TICKETS WHERE TYPE = ? AND POINTSALE = ? ", SerializerWriteParams.INSTANCE, SerializerReadInteger.INSTANCE);
+        Integer d;
+        d = (Integer) p.find(new DataParams() {
+            @Override
+            public void writeValues() throws BasicException {
+                setInt(1, type);
+                setInt(2, pointsale);
+            }
+        });
+
+        if (d == null) {
+            d = 1;
+        } else {
+            d++;
+        }
+
+        return d;
+
     }
 
     public final SentenceList getProductCatQBF() {

@@ -509,9 +509,7 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
             List<PaymentInfo> payments = paymentdialog.getSelectedPayments();
 
             double total = 0.0;
-            for (PaymentInfo p : payments) {
-                total += p.getTotal();
-            }
+            total = payments.stream().map(p -> p.getTotal()).reduce(total, (accumulator, _item) -> accumulator + _item);
 
             payments.add(new PaymentInfoTicket(-total, "debtpaid"));
 

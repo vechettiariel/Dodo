@@ -45,8 +45,10 @@ public class TicketInfo implements SerializableRead, Externalizable {
     private String m_sId;
     private TicketType tickettype;
 
-    private int m_iTicketId;
-    private java.util.Date m_dDate;
+    private int m_Number;
+    private int m_PointSale;
+
+    private Date m_dDate;
     private Properties attributes;
     private UserInfo m_User;
     private CustomerInfoExt m_Customer;
@@ -62,7 +64,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
     public TicketInfo() {
         m_sId = UUID.randomUUID().toString();
         tickettype = null;
-        m_iTicketId = 0; // incrementamos
+        m_Number = 0; // incrementamos
         m_dDate = new Date();
         attributes = new Properties();
         m_User = null;
@@ -80,7 +82,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
         // esto es solo para serializar tickets que no estan en la bolsa de tickets pendientes
         out.writeObject(m_sId);
         out.writeObject(tickettype);
-        out.writeInt(m_iTicketId);
+        out.writeInt(m_Number);
         out.writeObject(m_Customer);
         out.writeObject(m_dDate);
         out.writeObject(attributes);
@@ -93,7 +95,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
         // esto es solo para serializar tickets que no estan en la bolsa de tickets pendientes
         m_sId = (String) in.readObject();
         tickettype = (TicketType) in.readObject();
-        m_iTicketId = in.readInt();
+        m_Number = in.readInt();
         m_Customer = (CustomerInfoExt) in.readObject();
         m_dDate = (Date) in.readObject();
         attributes = (Properties) in.readObject();
@@ -111,7 +113,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
     public void readValues(DataRead dr) throws BasicException {
         m_sId = dr.getString(1);
         tickettype = new TicketType(dr.getInt(2));
-        m_iTicketId = dr.getInt(3);
+        m_Number = dr.getInt(3);
         m_dDate = dr.getTimestamp(4);
         m_sActiveCash = dr.getString(5);
         try {
@@ -134,7 +136,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
         TicketInfo t = new TicketInfo();
 
         t.tickettype = tickettype;
-        t.m_iTicketId = m_iTicketId;
+        t.m_Number = m_Number;
         t.m_dDate = m_dDate;
         t.m_sActiveCash = m_sActiveCash;
         t.attributes = (Properties) attributes.clone();
@@ -169,13 +171,20 @@ public class TicketInfo implements SerializableRead, Externalizable {
         this.tickettype = tickettype;
     }
 
-    public int getTicketId() {
-        return m_iTicketId;
+    public int getPointSale() {
+        return m_PointSale;
     }
 
-    public void setTicketId(int iTicketId) {
-        m_iTicketId = iTicketId;
-        // refreshLines();
+    public void setPointSale(int m_PointSale) {
+        this.m_PointSale = m_PointSale;
+    }
+
+    public int getNumber() {
+        return m_Number;
+    }
+
+    public void setNumber(int m_Number) {
+        this.m_Number = m_Number;
     }
 
     public String getName(Object info) {
@@ -188,10 +197,10 @@ public class TicketInfo implements SerializableRead, Externalizable {
         }
 
         if (info == null) {
-            if (m_iTicketId == 0) {
+            if (m_Number == 0) {
                 name.append("(").append(m_dateformat.format(m_dDate)).append(" ").append(Long.toString(m_dDate.getTime() % 1000)).append(")");
             } else {
-                name.append(Integer.toString(m_iTicketId));
+                name.append(Integer.toString(m_Number));
             }
         } else {
             name.append(info.toString());
@@ -424,10 +433,10 @@ public class TicketInfo implements SerializableRead, Externalizable {
         return avalues.toArray(new TicketTaxInfo[avalues.size()]);
     }
 
-    public String printId() {
-        if (m_iTicketId > 0) {
+    public String printNumber() {
+        if (m_Number > 0) {
             // valid ticket id
-            return Formats.INT.formatValue(m_iTicketId);
+            return Formats.INT.formatValue(m_Number);
         } else {
             return "";
         }

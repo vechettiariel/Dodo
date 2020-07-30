@@ -80,7 +80,9 @@ public abstract class JTicketsBag extends JPanel {
         return m_App.getAppUserView().getUser().getUserInfo();
     }
     
-    
+    public int getPointSale() {
+        return Integer.valueOf(m_App.getProperties().getProperty("fiscal.pointsale","0"));
+    }
     
     
 }

@@ -24,17 +24,14 @@ import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.user.DirtyManager;
 import com.openbravo.data.user.EditorRecord;
 import com.openbravo.format.Formats;
-import com.openbravo.pos.afip.PersonaA4;
-import com.openbravo.pos.forms.AppConfig;
 import com.openbravo.pos.forms.AppLocal;
-import com.openbravo.pos.forms.AppProperties;
+
 import com.openbravo.pos.forms.AppView;
+import com.openbravo.pos.ws.IPadron;
+import com.openbravo.pos.ws.Padron;
 import com.openbravo.pos.types.GeneralTypes;
 import com.openbravo.pos.util.StringUtils;
-import coop.guenoa.afip.padron.a4.Persona;
-import coop.guenoa.afip.wsaa.WsaaException;
 import java.awt.Component;
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.UUID;
 import javax.swing.JOptionPane;
@@ -806,9 +803,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                 if (m_jTaxID.getText().trim().length() > 0) {
 
                     try {
-                        AppProperties config = this.app.getProperties();
-                        PersonaA4 personaA4 = new PersonaA4((AppConfig) config);
-                        Persona persona = personaA4.getPersona(Long.valueOf(m_jTaxID.getText()));
+                        IPadron padron = Padron.getPadron(Long.valueOf(m_jTaxID.getText()));
 
                         m_jSearchkey.setText(null);
                         m_jName.setText(null);
@@ -834,39 +829,27 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                         txtRegion.setText(null);
                         txtCountry.setText(null);
 
-                        if (persona.getTipoPersona().equalsIgnoreCase("FISICA")) {
-                            m_jName.setText(persona.getApellido() + " " + persona.getNombre());
-                            m_jSearchkey.setText(persona.getApellido() + " " + persona.getNombre());
+                        if (padron.getTipoPersona().equalsIgnoreCase("FISICA")) {
+                            m_jName.setText(padron.getApellido() + " " + padron.getNombre());
+                            m_jSearchkey.setText(padron.getApellido() + " " + padron.getNombre());
                         } else {
-                            m_jName.setText(persona.getRazonSocial());
-                            m_jSearchkey.setText(persona.getApellido() + " " + persona.getNombre());
+                            m_jName.setText(padron.getRazonSocial());
+                            m_jSearchkey.setText(padron.getApellido() + " " + padron.getNombre());
                         }
 
-                        txtFirstName.setText(persona.getApellido());
-                        txtLastName.setText(persona.getNombre());
+                        txtFirstName.setText(padron.getApellido());
+                        txtLastName.setText(padron.getNombre());
+                        txtEmail.setText(padron.getEmail());
 
-                        if (persona.getEmail().length > 0) {
-                            txtEmail.setText(persona.getEmail(0).getDireccion());
-                        }
+                        txtPhone.setText(padron.getTelefono());
+                        txtPhone2.setText(padron.getTelefono2());
+                        txtAddress.setText(padron.getDireccion());
+                        txtAddress2.setText(padron.getDatoAdicional());
+                        txtPostal.setText(padron.getCodPostal());
+                        txtCity.setText(padron.getLocalidad());
+                        txtRegion.setText(padron.getProvincia());
 
-                        if (persona.getTelefono().length > 0) {
-                            txtPhone.setText(String.valueOf(persona.getTelefono(0).getNumero()));
-                        }
-
-                        if (persona.getTelefono().length > 1) {
-                            txtPhone2.setText(String.valueOf(persona.getTelefono(1).getNumero()));
-                        }
-
-                        if (persona.getDomicilio().length > 0) {
-                            txtAddress.setText(persona.getDomicilio(0).getDireccion());
-                            txtAddress2.setText(persona.getDomicilio(0).getDatoAdicional());
-                            txtPostal.setText(persona.getDomicilio(0).getCodPostal());
-                            txtCity.setText(persona.getDomicilio(0).getLocalidad());
-                            txtRegion.setText(persona.getDomicilio(0).getDescripcionProvincia());
-
-                        }
-
-                    } catch (WsaaException | RemoteException ex) {
+                    } catch (BasicException ex) {
                         new MessageInf(MessageInf.SGN_WARNING, ex.getLocalizedMessage()).show(this);
                     }
                 } else {

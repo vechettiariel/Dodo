@@ -6,30 +6,19 @@
 package com.openbravo.pos.config;
 
 import com.openbravo.data.gui.ComboBoxValModel;
-import com.openbravo.data.gui.MessageInf;
 import com.openbravo.data.user.DirtyManager;
 import com.openbravo.pos.forms.AppConfig;
 import com.openbravo.pos.types.GeneralTypes;
 import com.openbravo.pos.util.AltEncrypter;
 import com.openbravo.pos.util.FileChooserCert;
-import coop.guenoa.afip.util.Configuracion;
-import coop.guenoa.afip.wsaa.TicketLogin;
-import coop.guenoa.afip.wsaa.Wsaa;
-import coop.guenoa.afip.wsaa.WsaaException;
-import coop.guenoa.afip.wsfev1.DummyResponse;
-import coop.guenoa.afip.wsfev1.Wsfe_v1;
 import java.awt.Component;
-import java.awt.Toolkit;
-import java.rmi.RemoteException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author ariel
  */
-public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
+public class JPanelConfigValidation extends javax.swing.JPanel implements PanelConfig {
 
     private final DirtyManager dirty = new DirtyManager();
     private final ComboBoxValModel m_CategoryModel;
@@ -37,7 +26,7 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
     /**
      * Creates new form JPanelConfigTPV
      */
-    public JPanelConfigTPV() {
+    public JPanelConfigValidation() {
         initComponents();
 
         List a = GeneralTypes.getTypesResponsible();
@@ -90,7 +79,7 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
 
         jLabel1.setText("Cuit");
 
-        jLabel3.setText("Puto de Venta AFIP");
+        jLabel3.setText("Puto de Venta");
 
         jLabel5.setText("Validación");
 
@@ -151,41 +140,38 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jLabel8)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(m_cuit, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(213, 213, 213)
+                                .addComponent(jLabel9))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(61, 61, 61)
-                                .addComponent(jLabel8)
                                 .addGap(18, 18, 18)
-                                .addComponent(m_password, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9)))
-                        .addContainerGap(151, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(m_cboSalidaFiscal, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(m_puntoventa, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(m_password, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addGap(18, 18, 18)
+                            .addComponent(m_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(m_cuit, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(m_cboSalidaFiscal, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(m_certificado, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addComponent(jbtnFileName))
-                                .addComponent(m_usuario)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(m_puntoventa, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(79, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -198,7 +184,7 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(m_cuit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -208,8 +194,8 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(m_cboSalidaFiscal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(m_cboSalidaFiscal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -217,10 +203,10 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
                         .addComponent(jLabel6))
                     .addComponent(jbtnFileName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(m_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
+                .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(m_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -240,45 +226,43 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
 
     private void jbtn_test_wsaaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_test_wsaaActionPerformed
 
-        Wsaa auth = new Wsaa("wsfe");
-
-        TicketLogin ticketLogin = null;
-        try {
-            ticketLogin = auth.getTicketLogin();
-            
-            new MessageInf(MessageInf.SGN_SUCCESS, " ", ticketLogin.toString()).show(this);
-
-        } catch (WsaaException e) {
-            // TODO Auto-generated catch block
-            Toolkit.getDefaultToolkit().beep();
-            new MessageInf(MessageInf.SGN_WARNING, e.getMessage()).show(this);
-
-        }
-
-        Wsfe_v1 wsfev1 = new Wsfe_v1();
-
-        DummyResponse response = null;
-        try {
-            response = wsfev1.FEDummy();
-        } catch (RemoteException ex) {
-            Logger.getLogger(JPanelConfigTPV.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("App Server: " + response.getAppServer());
-        System.out.println("Auth Server: " + response.getAuthServer());
-        System.out.println("Db Server: " + response.getDbServer());
+//        Wsaa auth = new Wsaa("wsfe");
+//
+//        TicketLogin ticketLogin = null;
+//        try {
+//            ticketLogin = auth.getTicketLogin();
+//            
+//            new MessageInf(MessageInf.SGN_SUCCESS, " ", ticketLogin.toString()).show(this);
+//
+//        } catch (WsaaException e) {
+//            // TODO Auto-generated catch block
+//            Toolkit.getDefaultToolkit().beep();
+//            new MessageInf(MessageInf.SGN_WARNING, e.getMessage()).show(this);
+//
+//        }
+//
+//        Wsfe_v1 wsfev1 = new Wsfe_v1();
+//
+//        DummyResponse response = null;
+//        try {
+//            response = wsfev1.FEDummy();
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(JPanelConfigValidation.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        System.out.println("App Server: " + response.getAppServer());
+//        System.out.println("Auth Server: " + response.getAuthServer());
+//        System.out.println("Db Server: " + response.getDbServer());
 
     }//GEN-LAST:event_jbtn_test_wsaaActionPerformed
 
     @Override
     public void loadProperties(AppConfig config) {
-        m_cuit.setText(config.getProperty("wsafip.CUIT"));
-        m_CategoryModel.setSelectedKey(config.getProperty("wsafip.typeresp"));
-        m_puntoventa.setText(config.getProperty("wsafip.puntoventa"));
-
-        m_cboSalidaFiscal.setSelectedItem(config.getProperty("wsafip.salidafiscal"));
+        m_cuit.setText(config.getProperty("fiscal.codnumber"));
+        m_CategoryModel.setSelectedKey(config.getProperty("fiscal.typeresp"));
+        m_puntoventa.setText(config.getProperty("fiscal.pointsale"));
+        m_cboSalidaFiscal.setSelectedItem(config.getProperty("fiscal.validation"));
 
         m_certificado.setText(config.getProperty("wsafip.KEYSTORE"));
-
         String sUser = config.getProperty("wsafip.KEYSTORE_USER");
         String sPassword = config.getProperty("wsafip.KEYSTORE_PASS");
         if (sUser != null && sPassword != null && sPassword.startsWith("crypt:")) {
@@ -292,24 +276,23 @@ public class JPanelConfigTPV extends javax.swing.JPanel implements PanelConfig {
         /*
         Cargamos la configuracion WSAFIP
          */
-        Configuracion.CUIT = m_cuit.getText();
-        Configuracion.DEBUG = true;
-        Configuracion.HOMOLOCION = m_cboSalidaFiscal.getSelectedItem().equals("WSFEv1-HOMO");
-        Configuracion.KEYSTORE = m_certificado.getText();
-        Configuracion.KEYSTORE_USER = sUser;
-        Configuracion.KEYSTORE_PASS = sPassword;
-
+//        Configuracion.CUIT = m_cuit.getText();
+//        Configuracion.DEBUG = true;
+//        Configuracion.HOMOLOCION = m_cboSalidaFiscal.getSelectedItem().equals("WSFEv1-HOMO");
+//        Configuracion.KEYSTORE = m_certificado.getText();
+//        Configuracion.KEYSTORE_USER = sUser;
+//        Configuracion.KEYSTORE_PASS = sPassword;
         dirty.setDirty(false);
     }
 
     @Override
     public void saveProperties(AppConfig config) {
 
-        config.setProperty("wsafip.CUIT", m_cuit.getText());
-        config.setProperty("wsafip.typeresp", (String) m_CategoryModel.getSelectedKey());
-        config.setProperty("wsafip.puntoventa", m_puntoventa.getText());
+        config.setProperty("fiscal.codnumber", m_cuit.getText());
+        config.setProperty("fiscal.typeresp", (String) m_CategoryModel.getSelectedKey());
+        config.setProperty("iscal.pointsale", m_puntoventa.getText());
 
-        config.setProperty("wsafip.salidafiscal", comboValue(m_cboSalidaFiscal.getSelectedItem()));
+        config.setProperty("fiscal.validation", comboValue(m_cboSalidaFiscal.getSelectedItem()));
 
         config.setProperty("wsafip.KEYSTORE", m_certificado.getText());
         config.setProperty("wsafip.KEYSTORE_USER", m_usuario.getText());

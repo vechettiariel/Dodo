@@ -146,6 +146,8 @@ public class JTicketsBagShared extends JTicketsBag {
         saveCurrentTicket();
 
         TicketInfo ticket = new TicketInfo();
+        ticket.setPointSale(super.getPointSale());
+        
         m_sCurrentTicket = UUID.randomUUID().toString(); // m_fmtid.format(ticket.getId());
         m_panelticket.setActiveTicket(ticket, null);
     }
@@ -210,6 +212,7 @@ public class JTicketsBagShared extends JTicketsBag {
     private void m_jListTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jListTicketsActionPerformed
 
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
 
                 try {

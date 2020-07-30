@@ -49,24 +49,10 @@ import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.taxes.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.ticket.TicketType;
 import com.openbravo.pos.util.AltEncrypter;
 import com.openbravo.pos.util.JRPrinterAWT300;
 import com.openbravo.pos.util.ReportUtils;
-import coop.guenoa.afip.util.Configuracion;
-import coop.guenoa.afip.util.Debug;
-import coop.guenoa.afip.wsaa.TicketLogin;
-import coop.guenoa.afip.wsaa.Wsaa;
-import coop.guenoa.afip.wsaa.WsaaException;
-import coop.guenoa.afip.wsfev1.AlicIva;
-import coop.guenoa.afip.wsfev1.FEAuthRequest;
-import coop.guenoa.afip.wsfev1.FECAECabRequest;
-import coop.guenoa.afip.wsfev1.FECAECabResponse;
-import coop.guenoa.afip.wsfev1.FECAEDetRequest;
-import coop.guenoa.afip.wsfev1.FECAEDetResponse;
-import coop.guenoa.afip.wsfev1.FECAERequest;
-import coop.guenoa.afip.wsfev1.FECAEResponse;
-import coop.guenoa.afip.wsfev1.WsFev1Execepcion;
-import coop.guenoa.afip.wsfev1.Wsfe_v1;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -80,6 +66,7 @@ import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -141,6 +128,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     protected DataLogicCustomers dlCustomers;
     private JPaymentSelect paymentdialogreceipt;
     private JPaymentSelect paymentdialogrefund;
+    private SentenceList sentTicketype;
+    private ComboBoxValModel tickeTypeModel;
 
     /**
      * Creates new form JTicketView
@@ -179,6 +168,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         // El panel de los productos o de las lineas...
         catcontainer.add(getSouthComponent(), BorderLayout.CENTER);
 
+        // El modelo de Ticket Type
+        sentTicketype = dlSales.getTicketType();
+
         // El modelo de impuestos
         senttax = dlSales.getTaxList();
         senttaxcategories = dlSales.getTaxCategoriesList();
@@ -213,6 +205,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         // impuestos incluidos seleccionado ?
         m_jaddtax.setSelected("true".equals(m_jbtnconfig.getProperty("taxesincluded")));
+
+        // Inicializamos el combo ticket Type.
+        List<TicketType> tickeTypeList = sentTicketype.list();
+        tickeTypeModel = new ComboBoxValModel(tickeTypeList);
+        m_jTicketType.setModel(tickeTypeModel);
 
         // Inicializamos el combo de los impuestos.
         java.util.List<TaxInfo> taxlist = senttax.list();
@@ -901,7 +898,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     if (executeEvent(ticket, ticketext, "ticket.save") == null) {
                         // Save the receipt and assign a receipt number
                         //Obtengo CAE Fecha de Vto del ticket
-                        obtenerValidacionAfip(ticket);
+                        //obtenerValidacionAfip(ticket);
 
                         try {
                             dlSales.saveTicket(ticket, m_App.getInventoryLocation());
@@ -938,8 +935,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotcalculatetaxes"));
                 msg.show(this);
                 resultok = false;
-            } catch (WsFev1Execepcion | WsaaException | RemoteException ex) {
-                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (WsFev1Execepcion | WsaaException | RemoteException ex) {
+//                Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // reset the payment info
@@ -987,7 +984,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 jr = JasperCompileManager.compileReport(jd);
             } else {
                 try ( // read the compiled reporte
-                        ObjectInputStream oin = new ObjectInputStream(in)) {
+                         ObjectInputStream oin = new ObjectInputStream(in)) {
                     jr = (JasperReport) oin.readObject();
                 }
             }
@@ -1106,104 +1103,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         }
     }
 
-    private void obtenerValidacionAfip(TicketInfo ticket) throws WsFev1Execepcion, WsaaException, RemoteException {
-
-        AppConfig config = (AppConfig) m_App.getProperties();
-        String cuit = config.getProperty("wsafip.CUIT");
-        String typeresp = config.getProperty("wsafip.typeresp");
-        String puntoventa = config.getProperty("wsafip.puntoventa");
-        String cboSalidaFiscal = config.getProperty("wsafip.salidafiscal");
-        String certificado = config.getProperty("wsafip.KEYSTORE");
-        String sUser = config.getProperty("wsafip.KEYSTORE_USER");
-        String sPassword = config.getProperty("wsafip.KEYSTORE_PASS");
-        if (sUser != null && sPassword != null && sPassword.startsWith("crypt:")) {
-            // La clave esta encriptada.
-            AltEncrypter cypher = new AltEncrypter("cypherkey" + sUser);
-            sPassword = cypher.decrypt(sPassword.substring(6));
-        }
-
-        /*
-        Cargamos la configuracion WSAFIP
-         */
-        Configuracion.CUIT = cuit;
-        Configuracion.DEBUG = true;
-        Configuracion.HOMOLOCION = cboSalidaFiscal.equals("WSFEv1-HOMO");
-        Configuracion.KEYSTORE = certificado;
-        Configuracion.KEYSTORE_USER = sUser;
-        Configuracion.KEYSTORE_PASS = sPassword;
-
-        Debug.debug = true;
-
-        Wsaa wsaa = new Wsaa("wsfe");
-
-        Wsfe_v1 wsfev1 = new Wsfe_v1();
-        wsfev1.setHomologacion(cboSalidaFiscal.equals("WSFEv1-HOMO"));
-
-        TicketLogin tl = wsaa.getTicketLogin();
-        FEAuthRequest auth = new FEAuthRequest(tl.getToken(), tl.getSign(), Long.valueOf(cuit));
-
-        int ptoVta = Integer.getInteger(puntoventa);
-        int cbteTipo = ticket.getTicketType().getId();
-
-        int nro_comprobante = 0;
-        nro_comprobante = wsfev1.FECompUltimoAutorizado(auth, ptoVta, cbteTipo).getCbteNro();
-
-        nro_comprobante = nro_comprobante + 1;
-
-        FECAECabRequest feCabReq = new FECAECabRequest(1, ptoVta, cbteTipo);
-
-        FECAEDetRequest[] e = new FECAEDetRequest[1];
-        e[0] = new FECAEDetRequest();
-        e[0].setConcepto(2);
-
-        SimpleDateFormat form = new SimpleDateFormat("yyyyMMdd");
-
-        e[0].setCbteFch(form.format(ticket.getDate()));
-        e[0].setCbteDesde(nro_comprobante);
-        e[0].setCbteHasta(nro_comprobante);
-        e[0].setDocTipo(80);
-        e[0].setDocNro(Long.valueOf("30533004160"));
-        e[0].setFchServDesde(e[0].getCbteFch());
-        e[0].setFchServHasta(e[0].getCbteFch());
-        e[0].setFchVtoPago(e[0].getCbteFch());
-        e[0].setImpNeto(100.00);
-        e[0].setImpOpEx(0.00);
-        e[0].setImpIVA(21.00);
-        e[0].setImpTrib(0.00);
-        e[0].setImpTotConc(0.00);
-        e[0].setImpTotal(121.00);
-
-        AlicIva[] iva = new AlicIva[2];
-        iva[0] = new AlicIva();
-        iva[0].setBaseImp(100.00);
-        iva[0].setId(5);
-        iva[0].setImporte(21.00);
-
-        /*
-		iva[1] = new AlicIva();
-		iva[1].setBaseImp(100.00);
-		iva[1].setId(4);
-		iva[1].setImporte(10.50);
-         */
-        e[0].setIva(iva);
-        e[0].setMonId("PES");
-        e[0].setMonCotiz(1);
-
-        FECAERequest feCAEReq = new FECAERequest(feCabReq, e);
-
-        FECAEResponse result;
-
-        result = wsfev1.FECAESolicitar(auth, feCAEReq);
-
-        FECAECabResponse cabs = result.getFeCabResp();
-        System.out.println(" " + cabs.getResultado());
-        System.out.println(" " + cabs.getFchProceso());
-
-        FECAEDetResponse[] resps = result.getFeDetResp();
-        for (FECAEDetResponse fecaeDetResponse : resps) {
-            System.out.println("CAE: " + fecaeDetResponse.getCAE());
-            System.out.println(" Fcha Venc: " + fecaeDetResponse.getCAEFchVto());
-        }
+    private void obtenerValidacionAfip(TicketInfo ticket) {
+        m_App.getDeviceTicket();
     }
 
     public static class ScriptArg {
@@ -1291,8 +1192,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         m_jPanContainer = new javax.swing.JPanel();
         m_jOptions = new javax.swing.JPanel();
         m_jButtons = new javax.swing.JPanel();
-        m_jTicketId = new javax.swing.JLabel();
+        m_jTicketType = new javax.swing.JComboBox<>();
+        m_jNumber = new javax.swing.JLabel();
         btnCustomer = new javax.swing.JButton();
+        m_jTicketId = new javax.swing.JLabel();
         btnSplit = new javax.swing.JButton();
         m_jPanelScripts = new javax.swing.JPanel();
         m_jButtonsExt = new javax.swing.JPanel();
@@ -1336,12 +1239,24 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_jOptions.setLayout(new java.awt.BorderLayout());
 
-        m_jTicketId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        m_jTicketId.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
-        m_jTicketId.setOpaque(true);
-        m_jTicketId.setPreferredSize(new java.awt.Dimension(160, 25));
-        m_jTicketId.setRequestFocusEnabled(false);
-        m_jButtons.add(m_jTicketId);
+        m_jTicketType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        m_jTicketType.setFocusable(false);
+        m_jTicketType.setMaximumSize(new java.awt.Dimension(104, 40));
+        m_jTicketType.setMinimumSize(new java.awt.Dimension(104, 40));
+        m_jTicketType.setPreferredSize(new java.awt.Dimension(150, 40));
+        m_jTicketType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                m_jTicketTypeActionPerformed(evt);
+            }
+        });
+        m_jButtons.add(m_jTicketType);
+
+        m_jNumber.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        m_jNumber.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
+        m_jNumber.setOpaque(true);
+        m_jNumber.setPreferredSize(new java.awt.Dimension(100, 25));
+        m_jNumber.setRequestFocusEnabled(false);
+        m_jButtons.add(m_jNumber);
 
         btnCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/kuser.png"))); // NOI18N
         btnCustomer.setText("(F9)");
@@ -1357,6 +1272,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             }
         });
         m_jButtons.add(btnCustomer);
+
+        m_jTicketId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        m_jTicketId.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("Button.darkShadow")), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 4)));
+        m_jTicketId.setOpaque(true);
+        m_jTicketId.setPreferredSize(new java.awt.Dimension(160, 25));
+        m_jTicketId.setRequestFocusEnabled(false);
+        m_jButtons.add(m_jTicketId);
 
         btnSplit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/openbravo/images/editcut.png"))); // NOI18N
         btnSplit.setText("(F10)");
@@ -1878,6 +1800,23 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
 
     }//GEN-LAST:event_m_jKeyFactoryKeyPressed
+
+    private void m_jTicketTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jTicketTypeActionPerformed
+        try {
+            TicketType type = (TicketType) tickeTypeModel.getSelectedItem();
+            int number = dlSales.findNextTicketNumber(type.getId(), m_oTicket.getPointSale());
+
+            m_oTicket.setNumber(number);
+
+            m_jNumber.setText(String.valueOf(number));
+
+        } catch (BasicException ex) {
+            Logger.getLogger(JPanelTicket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_m_jTicketTypeActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCustomer;
     private javax.swing.JButton btnSplit;
@@ -1900,6 +1839,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JLabel m_jLblTotalEuros2;
     private javax.swing.JLabel m_jLblTotalEuros3;
     private javax.swing.JButton m_jList;
+    private javax.swing.JLabel m_jNumber;
     private com.openbravo.beans.JNumberKeys m_jNumberKeys;
     private javax.swing.JPanel m_jOptions;
     private javax.swing.JPanel m_jPanContainer;
@@ -1915,6 +1855,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private javax.swing.JComboBox m_jTax;
     private javax.swing.JLabel m_jTaxesEuros;
     private javax.swing.JLabel m_jTicketId;
+    private javax.swing.JComboBox<String> m_jTicketType;
     private javax.swing.JLabel m_jTotalEuros;
     private javax.swing.JButton m_jUp;
     private javax.swing.JToggleButton m_jaddtax;

@@ -24,6 +24,7 @@ import com.openbravo.data.loader.Session;
 import com.openbravo.pos.printer.*;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
+import com.openbravo.pos.validation.IInvoiceValidation;
 
 /**
  *
@@ -44,6 +45,8 @@ public interface AppView {
     public int getActiveCashSequence();
     public Date getActiveCashDateStart();
     public Date getActiveCashDateEnd();
+    
+    public IInvoiceValidation getInvoiceValidacion();
     
     public String getInventoryLocation();
     

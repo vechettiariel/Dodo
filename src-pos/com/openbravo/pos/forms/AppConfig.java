@@ -204,7 +204,8 @@ public class AppConfig implements AppProperties {
         /*
         Configuracion Default de Facturación
          */
-        m_propsconfig.setProperty("wsafip.salidafiscal", "NoDefinido");
-
+        m_propsconfig.setProperty("fiscal.codnumber", "0");
+        m_propsconfig.setProperty("fiscal.validation", "NoDefinido");
+        m_propsconfig.setProperty("fiscal.pointsale", "0");
     }
 }

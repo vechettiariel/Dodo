@@ -1,5 +1,3 @@
-
-
 --    Openbravo POS is a point of sales application designed for touch screens.
 --    Copyright (C) 2007-2010 Openbravo, S.L.
 --    http://sourceforge.net/projects/openbravopos
@@ -55,7 +53,7 @@ INSERT INTO ROLES (
 VALUES (
 	'0'
 	,'Administrador role'
-	,$FILE{/com/openbravo/pos/templates/ ROLE.Administrator.xml}
+	,$FILE{ / com / openbravo / pos / templates / ROLE.Administrator.xml}
 	);
 
 INSERT INTO ROLES (
@@ -66,7 +64,7 @@ INSERT INTO ROLES (
 VALUES (
 	'1'
 	,'Gerente role'
-	,$FILE{/com/openbravo/pos/templates/ROLE.Manager.xml}
+	,$FILE{ / com / openbravo / pos / templates / ROLE.Manager.xml}
 	);
 
 INSERT INTO ROLES (
@@ -77,7 +75,7 @@ INSERT INTO ROLES (
 VALUES (
 	'2'
 	,'Empleado role'
-	,$FILE{/com/openbravo/pos/templates/ROLE.Employee.xml}
+	,$FILE{ / com / openbravo / pos / templates / ROLE.Employee.xml}
 	);
 
 INSERT INTO ROLES (
@@ -88,7 +86,7 @@ INSERT INTO ROLES (
 VALUES (
 	'3'
 	,'Invitado role'
-	,$FILE{/com/openbravo/pos/templates/ROLE.Guest.xml}
+	,$FILE{ / com / openbravo / pos / templates / ROLE.Guest.xml}
 	);
 
 CREATE TABLE PEOPLE (
@@ -195,7 +193,7 @@ VALUES (
 	'0'
 	,'Printer.Start'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.Start.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.Start.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -208,7 +206,7 @@ VALUES (
 	'1'
 	,'Printer.Ticket'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.Ticket.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.Ticket.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -221,7 +219,7 @@ VALUES (
 	'2'
 	,'Printer.Ticket2'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.Ticket2.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.Ticket2.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -234,7 +232,7 @@ VALUES (
 	'3'
 	,'Printer.TicketPreview'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.TicketPreview.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.TicketPreview.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -247,7 +245,7 @@ VALUES (
 	'4'
 	,'Printer.TicketTotal'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.TicketTotal.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.TicketTotal.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -260,7 +258,7 @@ VALUES (
 	'5'
 	,'Printer.OpenDrawer'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.OpenDrawer.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.OpenDrawer.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -273,7 +271,7 @@ VALUES (
 	'6'
 	,'Printer.Ticket.Logo'
 	,1
-	,$FILE{/com/openbravo/pos/templates/Printer.Ticket.Logo.png}
+	,$FILE{ / com / openbravo / pos / templates / Printer.Ticket.Logo.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -286,7 +284,7 @@ VALUES (
 	'7'
 	,'Printer.TicketLine'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.TicketLine.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.TicketLine.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -299,7 +297,7 @@ VALUES (
 	'8'
 	,'Printer.CloseCash'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.CloseCash.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.CloseCash.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -312,7 +310,7 @@ VALUES (
 	'9'
 	,'Window.Logo'
 	,1
-	,$FILE{/com/openbravo/pos/templates/Window.Logo.png}
+	,$FILE{ / com / openbravo / pos / templates / Window.Logo.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -325,7 +323,7 @@ VALUES (
 	'10'
 	,'Window.Title'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Window.Title.txt}
+	,$FILE{ / com / openbravo / pos / templates / Window.Title.txt}
 	);
 
 INSERT INTO RESOURCES (
@@ -338,7 +336,7 @@ VALUES (
 	'11'
 	,'Ticket.Buttons'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Ticket.Buttons.xml}
+	,$FILE{ / com / openbravo / pos / templates / Ticket.Buttons.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -351,7 +349,7 @@ VALUES (
 	'12'
 	,'Ticket.Line'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Ticket.Line.xml}
+	,$FILE{ / com / openbravo / pos / templates / Ticket.Line.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -364,7 +362,7 @@ VALUES (
 	'13'
 	,'Printer.Inventory'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.Inventory.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.Inventory.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -377,7 +375,7 @@ VALUES (
 	'14'
 	,'Menu.Root'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Menu.Root.txt}
+	,$FILE{ / com / openbravo / pos / templates / Menu.Root.txt}
 	);
 
 INSERT INTO RESOURCES (
@@ -390,7 +388,7 @@ VALUES (
 	'15'
 	,'Printer.CustomerPaid'
 	,0
-	,$FILE{/com/openbravo/pos/templates/ Printer.CustomerPaid.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.CustomerPaid.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -403,7 +401,7 @@ VALUES (
 	'16'
 	,'Printer.CustomerPaid2'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.CustomerPaid2.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.CustomerPaid2.xml}
 	);
 
 INSERT INTO RESOURCES (
@@ -416,7 +414,7 @@ VALUES (
 	'17'
 	,'payment.cash'
 	,0
-	,$FILE{/com/openbravo/pos/templates/payment.cash.txt}
+	,$FILE{ / com / openbravo / pos / templates / payment.cash.txt}
 	);
 
 INSERT INTO RESOURCES (
@@ -429,7 +427,7 @@ VALUES (
 	'18'
 	,'billete.100pesos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/billete.100 pesos.png}
+	,$FILE{ / com / openbravo / pos / templates / billete .100 pesos.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -442,7 +440,7 @@ VALUES (
 	'19'
 	,'billete.10pesos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/billete.10pesos.png}
+	,$FILE{ / com / openbravo / pos / templates / billete .10 pesos.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -455,7 +453,7 @@ VALUES (
 	'20'
 	,'billete.20pesos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/billete.20 pesos.png}
+	,$FILE{ / com / openbravo / pos / templates / billete .20 pesos.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -468,7 +466,7 @@ VALUES (
 	'21'
 	,'billete.2pesos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/billete.2pesos.png}
+	,$FILE{ / com / openbravo / pos / templates / billete .2 pesos.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -481,7 +479,7 @@ VALUES (
 	'22'
 	,'billete.50pesos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/billete.50 pesos.png}
+	,$FILE{ / com / openbravo / pos / templates / billete .50 pesos.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -494,7 +492,7 @@ VALUES (
 	'23'
 	,'billete.5pesos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/billete.5pesos.png}
+	,$FILE{ / com / openbravo / pos / templates / billete .5 pesos.png}
 	);
 
 INSERT INTO RESOURCES (
@@ -507,7 +505,7 @@ VALUES (
 	'24'
 	,'moneda.10centavos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/moneda.10 centavos.jpg}
+	,$FILE{ / com / openbravo / pos / templates / moneda .10 centavos.jpg}
 	);
 
 INSERT INTO RESOURCES (
@@ -520,7 +518,7 @@ VALUES (
 	'25'
 	,'moneda.1peso'
 	,1
-	,$FILE{/com/openbravo/pos/templates/moneda.1peso.jpg}
+	,$FILE{ / com / openbravo / pos / templates / moneda .1 peso.jpg}
 	);
 
 INSERT INTO RESOURCES (
@@ -533,7 +531,7 @@ VALUES (
 	'26'
 	,'moneda.25centavos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/moneda.25 centavos.jpg}
+	,$FILE{ / com / openbravo / pos / templates / moneda .25 centavos.jpg}
 	);
 
 INSERT INTO RESOURCES (
@@ -546,7 +544,7 @@ VALUES (
 	'27'
 	,'moneda.50centavos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/moneda.50centavos.jpg}
+	,$FILE{ / com / openbravo / pos / templates / moneda .50 centavos.jpg}
 	);
 
 INSERT INTO RESOURCES (
@@ -559,7 +557,7 @@ VALUES (
 	'28'
 	,'moneda.5centavos'
 	,1
-	,$FILE{/com/openbravo/pos/templates/moneda.5centavos.jpg}
+	,$FILE{ / com / openbravo / pos / templates / moneda .5 centavos.jpg}
 	);
 
 --INSERT INTO RESOURCES(ID, NAME, RESTYPE, CONTENT) VALUES('29', 'coin.1cent', 1, $FILE{/com/openbravo/pos/templates/coin.1cent.png});
@@ -573,7 +571,7 @@ VALUES (
 	'30'
 	,'Printer.PartialCash'
 	,0
-	,$FILE{/com/openbravo/pos/templates/Printer.PartialCash.xml}
+	,$FILE{ / com / openbravo / pos / templates / Printer.PartialCash.xml}
 	);
 
 CREATE TABLE TAXCUSTCATEGORIES (
@@ -970,20 +968,15 @@ CREATE TABLE RECEIPTS (
 CREATE INDEX RECEIPTS_INX_1 ON RECEIPTS (DATENEW);
 
 CREATE TABLE TICKETTYPE (
-	ID VARCHAR NOT NULL
-	,TYPE INTEGER NOT NULL
-	,POINTSALE INTEGER NOT NULL
-	,LAST BIGINT NOT NULL
-	,CONSTRAINT TICKETTYPE_PKEY PRIMARY KEY (id)
-	,CONSTRAINT TICKETTYPE_UKEY UNIQUE (
-		type
-		,pointsale
-		)
+	ID INTEGER NOT NULL
+	,NAME VARCHAR NOT NULL
+	,CONSTRAINT TICKETTYPE_PKEY PRIMARY KEY (ID)
 	)
 
 CREATE TABLE TICKETS (
 	ID VARCHAR NOT NULL
-	,TICKETTYPE INTEGER DEFAULT 0 NOT NULL
+	,TYPE INTEGER NOT NULL
+	,POINTSALE INTEGER NOT NULL
 	,NUMBER INTEGER NOT NULL
 	,PERSON VARCHAR NOT NULL
 	,CUSTOMER VARCHAR
@@ -992,6 +985,7 @@ CREATE TABLE TICKETS (
 	,CONSTRAINT TICKETS_FK_ID FOREIGN KEY (ID) REFERENCES RECEIPTS(ID)
 	,CONSTRAINT TICKETS_FK_PEOPLE FOREIGN KEY (PERSON) REFERENCES PEOPLE(ID)
 	,CONSTRAINT TICKETS_FK_KCUSTOMERS FOREIGN KEY (CUSTOMER) REFERENCES CUSTOMERS(ID)
+	,CONSTRAINT TICKETS_FK_TICKETTYPE FOREIGN KEY (TYPE) REFERENCES TICKETTYPE(ID)
 	);
 
 CREATE INDEX TICKETS_TICKETID ON TICKETS (
@@ -1070,7 +1064,7 @@ INSERT INTO FLOORS (
 VALUES (
 	'0'
 	,'Restaurant floor'
-	,$FILE{/com/openbravo/pos/templates/restaurantsample.png}
+	,$FILE{ / com / openbravo / pos / templates / restaurantsample.png}
 	);
 
 CREATE TABLE PLACES (
