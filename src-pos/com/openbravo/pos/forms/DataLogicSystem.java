@@ -196,7 +196,7 @@ public class DataLogicSystem extends BeanFactoryDataSingle {
     
     public final void setResource(String name, int type, byte[] data) {
         
-        Object[] value = new Object[] {UUID.randomUUID().toString(), name, new Integer(type), data};
+        Object[] value = new Object[] {UUID.randomUUID().toString(), name, type, data};
         try {
             if (m_resourcebytesupdate.exec(value) == 0) {
                 m_resourcebytesinsert.exec(value);

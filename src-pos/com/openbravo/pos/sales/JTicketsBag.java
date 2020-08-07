@@ -34,6 +34,7 @@ public abstract class JTicketsBag extends JPanel {
 
     /**
      * Creates new form JTicketsBag
+     *
      * @param oApp
      * @param panelticket
      */
@@ -41,7 +42,7 @@ public abstract class JTicketsBag extends JPanel {
         m_App = oApp;
         m_panelticket = panelticket;
         m_dlSales = (DataLogicSales) m_App.getBean("com.openbravo.pos.sales.DataLogicSales");
-        
+
     }
 
     public abstract void activate();
@@ -64,25 +65,25 @@ public abstract class JTicketsBag extends JPanel {
 
         if (null == sName) { // "simple"
             return new JTicketsBagSimple(app, panelticket);
-        } else switch (sName) {
-            case "standard":
-                // return new JTicketsBagMulti(oApp, user, panelticket);
-                return new JTicketsBagShared(app, panelticket);
-            case "restaurant":
-                return new JTicketsBagRestaurantMap(app, panelticket);
-            default:
-                // "simple"
-                return new JTicketsBagSimple(app, panelticket);
-        }
+        } else {
+            return switch (sName) {
+                case "standard" ->
+                    new JTicketsBagShared(app, panelticket);
+                case "restaurant" ->
+                    new JTicketsBagRestaurantMap(app, panelticket);
+                default ->
+                    new JTicketsBagSimple(app, panelticket);
+            }; // return new JTicketsBagMulti(oApp, user, panelticket);
+        }        // "simple"
+
     }
 
     public UserInfo getVendedor() {
         return m_App.getAppUserView().getUser().getUserInfo();
     }
-    
+
     public int getPointSale() {
-        return Integer.valueOf(m_App.getProperties().getProperty("fiscal.pointsale","0"));
+        return Integer.valueOf(m_App.getProperties().getProperty("fiscal.pointsale", "0"));
     }
-    
-    
+
 }

@@ -27,9 +27,13 @@ import com.openbravo.pos.forms.AppConfig;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.util.ReportUtils;
 import com.openbravo.pos.util.StringParser;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.api.SubstanceSkin;
 import org.jvnet.substance.skin.SkinInfo;
@@ -109,19 +113,20 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 //        jcboLAF.addItem(new UIManager.LookAndFeelInfo("Openbravo", "com.openbravo.pos.skin.OpenbravoLookAndFeel"));
         // Installed skins
         LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-        for (int i = 0; i < lafs.length; i++) {
-            jcboLAF.addItem(new LAFInfo(lafs[i].getName(), lafs[i].getClassName()));
+        for (LookAndFeelInfo laf : lafs) {
+            jcboLAF.addItem(new LAFInfo(laf.getName(), laf.getClassName()));
         }
 
         // Substance skins
         // new SubstanceLookAndFeel(); // TODO: Remove in Substance 5.0. Workaround for Substance 4.3 to initialize static variables
         Map<String, SkinInfo> skins = SubstanceLookAndFeel.getAllSkins();
-        for (SkinInfo skin : skins.values()) {
+        skins.values().forEach(skin -> {
             jcboLAF.addItem(new LAFInfo(skin.getDisplayName(), skin.getClassName()));
-        }
+        });
 
         jcboLAF.addActionListener(new java.awt.event.ActionListener() {
 
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 changeLAF();
             }
@@ -304,26 +309,25 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             jcboSerialPrinter.setSelectedItem(p.nextToken(','));
         } else {
             switch (sparam) {
-                case "serial":
-                case "file":
+                case "serial", "file" -> {
                     jcboMachinePrinter.setSelectedItem("epson");
                     jcboConnPrinter.setSelectedItem(sparam);
                     jcboSerialPrinter.setSelectedItem(p.nextToken(','));
-                    break;
-                case "javapos":
+                }
+                case "javapos" -> {
                     jcboMachinePrinter.setSelectedItem(sparam);
                     m_jtxtJPOSPrinter.setText(p.nextToken(','));
                     m_jtxtJPOSDrawer.setText(p.nextToken(','));
-                    break;
-                case "printer":
+                }
+                case "printer" -> {
                     jcboMachinePrinter.setSelectedItem(sparam);
                     printer1printerparams.setParameters(p);
-                    break;
-                default:
+                }
+                default -> {
                     jcboMachinePrinter.setSelectedItem(sparam);
                     jcboConnPrinter.setSelectedItem(unifySerialInterface(p.nextToken(',')));
                     jcboSerialPrinter.setSelectedItem(p.nextToken(','));
-                    break;
+                }
             }
         }
 
@@ -335,26 +339,25 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             jcboSerialPrinter2.setSelectedItem(p.nextToken(','));
         } else {
             switch (sparam) {
-                case "serial":
-                case "file":
+                case "serial", "file" -> {
                     jcboMachinePrinter2.setSelectedItem("epson");
                     jcboConnPrinter2.setSelectedItem(sparam);
                     jcboSerialPrinter2.setSelectedItem(p.nextToken(','));
-                    break;
-                case "javapos":
+                }
+                case "javapos" -> {
                     jcboMachinePrinter2.setSelectedItem(sparam);
                     m_jtxtJPOSPrinter2.setText(p.nextToken(','));
                     m_jtxtJPOSDrawer2.setText(p.nextToken(','));
-                    break;
-                case "printer":
+                }
+                case "printer" -> {
                     jcboMachinePrinter2.setSelectedItem(sparam);
                     printer2printerparams.setParameters(p);
-                    break;
-                default:
+                }
+                default -> {
                     jcboMachinePrinter2.setSelectedItem(sparam);
                     jcboConnPrinter2.setSelectedItem(unifySerialInterface(p.nextToken(',')));
                     jcboSerialPrinter2.setSelectedItem(p.nextToken(','));
-                    break;
+                }
             }
         }
 
@@ -366,42 +369,51 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
         } else {
             switch (sparam) {
-                case "serial":
-                case "file":
+                case "serial", "file" -> {
                     jcboMachinePrinter3.setSelectedItem("epson");
                     jcboConnPrinter3.setSelectedItem(sparam);
                     jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
-                    break;
-                case "javapos":
+                }
+                case "javapos" -> {
                     jcboMachinePrinter3.setSelectedItem(sparam);
                     m_jtxtJPOSPrinter3.setText(p.nextToken(','));
                     m_jtxtJPOSDrawer3.setText(p.nextToken(','));
-                    break;
-                case "printer":
+                }
+                case "printer" -> {
                     jcboMachinePrinter3.setSelectedItem(sparam);
                     printer3printerparams.setParameters(p);
-                    break;
-                default:
+                }
+                default -> {
                     jcboMachinePrinter3.setSelectedItem(sparam);
                     jcboConnPrinter3.setSelectedItem(unifySerialInterface(p.nextToken(',')));
                     jcboSerialPrinter3.setSelectedItem(p.nextToken(','));
-                    break;
+                }
             }
         }
 
         p = new StringParser(config.getProperty("machine.display"));
         sparam = unifySerialInterface(p.nextToken(':'));
-        if ("serial".equals(sparam) || "file".equals(sparam)) {
-            jcboMachineDisplay.setSelectedItem("epson");
-            jcboConnDisplay.setSelectedItem(sparam);
-            jcboSerialDisplay.setSelectedItem(p.nextToken(','));
-        } else if ("javapos".equals(sparam)) {
-            jcboMachineDisplay.setSelectedItem(sparam);
-            m_jtxtJPOSName.setText(p.nextToken(','));
-        } else {
+        if (null == sparam) {
             jcboMachineDisplay.setSelectedItem(sparam);
             jcboConnDisplay.setSelectedItem(unifySerialInterface(p.nextToken(',')));
             jcboSerialDisplay.setSelectedItem(p.nextToken(','));
+        } else {
+            switch (sparam) {
+                case "serial", "file" -> {
+                    jcboMachineDisplay.setSelectedItem("epson");
+                    jcboConnDisplay.setSelectedItem(sparam);
+                    jcboSerialDisplay.setSelectedItem(p.nextToken(','));
+                }
+                case "javapos" -> {
+                    jcboMachineDisplay.setSelectedItem(sparam);
+                    m_jtxtJPOSName.setText(p.nextToken(','));
+                }
+                default -> {
+                    jcboMachineDisplay.setSelectedItem(sparam);
+                    jcboConnDisplay.setSelectedItem(unifySerialInterface(p.nextToken(',')));
+                    jcboSerialDisplay.setSelectedItem(p.nextToken(','));
+                }
+            }
         }
 
         p = new StringParser(config.getProperty("machine.scale"));
@@ -437,45 +449,65 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
         config.setProperty("machine.ticketsbag", comboValue(jcboTicketsBag.getSelectedItem()));
 
         String sMachinePrinter = comboValue(jcboMachinePrinter.getSelectedItem());
-        if ("epson".equals(sMachinePrinter) || "tmu220".equals(sMachinePrinter) || "star".equals(sMachinePrinter) || "ithaca".equals(sMachinePrinter) || "surepos".equals(sMachinePrinter)) {
-            config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter.getSelectedItem()) + "," + comboValue(jcboSerialPrinter.getSelectedItem()));
-        } else if ("javapos".equals(sMachinePrinter)) {
-            config.setProperty("machine.printer", sMachinePrinter + ":" + m_jtxtJPOSPrinter.getText() + "," + m_jtxtJPOSDrawer.getText());
-        } else if ("printer".equals(sMachinePrinter)) {
-            config.setProperty("machine.printer", sMachinePrinter + ":" + printer1printerparams.getParameters());
-        } else {
+        if (null == sMachinePrinter) {
             config.setProperty("machine.printer", sMachinePrinter);
+        } else {
+            switch (sMachinePrinter) {
+                case "epson", "tmu220", "star", "ithaca", "surepos" ->
+                    config.setProperty("machine.printer", sMachinePrinter + ":" + comboValue(jcboConnPrinter.getSelectedItem()) + "," + comboValue(jcboSerialPrinter.getSelectedItem()));
+                case "javapos" ->
+                    config.setProperty("machine.printer", sMachinePrinter + ":" + m_jtxtJPOSPrinter.getText() + "," + m_jtxtJPOSDrawer.getText());
+                case "printer" ->
+                    config.setProperty("machine.printer", sMachinePrinter + ":" + printer1printerparams.getParameters());
+                default ->
+                    config.setProperty("machine.printer", sMachinePrinter);
+            }
         }
 
         String sMachinePrinter2 = comboValue(jcboMachinePrinter2.getSelectedItem());
-        if ("epson".equals(sMachinePrinter2) || "tmu220".equals(sMachinePrinter2) || "star".equals(sMachinePrinter2) || "ithaca".equals(sMachinePrinter2) || "surepos".equals(sMachinePrinter2)) {
-            config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + comboValue(jcboConnPrinter2.getSelectedItem()) + "," + comboValue(jcboSerialPrinter2.getSelectedItem()));
-        } else if ("javapos".equals(sMachinePrinter2)) {
-            config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + m_jtxtJPOSPrinter2.getText() + "," + m_jtxtJPOSDrawer2.getText());
-        } else if ("printer".equals(sMachinePrinter2)) {
-            config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + printer2printerparams.getParameters());
-        } else {
+        if (null == sMachinePrinter2) {
             config.setProperty("machine.printer.2", sMachinePrinter2);
+        } else {
+            switch (sMachinePrinter2) {
+                case "epson", "tmu220", "star", "ithaca", "surepos" ->
+                    config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + comboValue(jcboConnPrinter2.getSelectedItem()) + "," + comboValue(jcboSerialPrinter2.getSelectedItem()));
+                case "javapos" ->
+                    config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + m_jtxtJPOSPrinter2.getText() + "," + m_jtxtJPOSDrawer2.getText());
+                case "printer" ->
+                    config.setProperty("machine.printer.2", sMachinePrinter2 + ":" + printer2printerparams.getParameters());
+                default ->
+                    config.setProperty("machine.printer.2", sMachinePrinter2);
+            }
         }
 
         String sMachinePrinter3 = comboValue(jcboMachinePrinter3.getSelectedItem());
-        if ("epson".equals(sMachinePrinter3) || "tmu220".equals(sMachinePrinter3) || "star".equals(sMachinePrinter3) || "ithaca".equals(sMachinePrinter3) || "surepos".equals(sMachinePrinter3)) {
-            config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + comboValue(jcboConnPrinter3.getSelectedItem()) + "," + comboValue(jcboSerialPrinter3.getSelectedItem()));
-        } else if ("javapos".equals(sMachinePrinter3)) {
-            config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + m_jtxtJPOSPrinter3.getText() + "," + m_jtxtJPOSDrawer3.getText());
-        } else if ("printer".equals(sMachinePrinter3)) {
-            config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + printer3printerparams.getParameters());
-        } else {
+        if (null == sMachinePrinter3) {
             config.setProperty("machine.printer.3", sMachinePrinter3);
+        } else {
+            switch (sMachinePrinter3) {
+                case "epson", "tmu220", "star", "ithaca", "surepos" ->
+                    config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + comboValue(jcboConnPrinter3.getSelectedItem()) + "," + comboValue(jcboSerialPrinter3.getSelectedItem()));
+                case "javapos" ->
+                    config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + m_jtxtJPOSPrinter3.getText() + "," + m_jtxtJPOSDrawer3.getText());
+                case "printer" ->
+                    config.setProperty("machine.printer.3", sMachinePrinter3 + ":" + printer3printerparams.getParameters());
+                default ->
+                    config.setProperty("machine.printer.3", sMachinePrinter3);
+            }
         }
 
         String sMachineDisplay = comboValue(jcboMachineDisplay.getSelectedItem());
-        if ("epson".equals(sMachineDisplay) || "ld200".equals(sMachineDisplay) || "surepos".equals(sMachineDisplay)) {
-            config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
-        } else if ("javapos".equals(sMachineDisplay)) {
-            config.setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
-        } else {
+        if (null == sMachineDisplay) {
             config.setProperty("machine.display", sMachineDisplay);
+        } else {
+            switch (sMachineDisplay) {
+                case "epson", "ld200", "surepos" ->
+                    config.setProperty("machine.display", sMachineDisplay + ":" + comboValue(jcboConnDisplay.getSelectedItem()) + "," + comboValue(jcboSerialDisplay.getSelectedItem()));
+                case "javapos" ->
+                    config.setProperty("machine.display", sMachineDisplay + ":" + m_jtxtJPOSName.getText());
+                default ->
+                    config.setProperty("machine.display", sMachineDisplay);
+            }
         }
 
         // La bascula
@@ -518,10 +550,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             // The selected look and feel is different from the current look and feel.
             SwingUtilities.invokeLater(new Runnable() {
 
+                @Override
                 public void run() {
                     try {
                         String lafname = laf.getClassName();
-                        Object laf = Class.forName(lafname).newInstance();
+
+                        Class<?> clazz = Class.forName(lafname).getSuperclass();
+
+                        Object laf = clazz.getDeclaredConstructor().newInstance();
 
                         if (laf instanceof LookAndFeel) {
                             UIManager.setLookAndFeel((LookAndFeel) laf);
@@ -530,7 +566,8 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
                         }
 
                         SwingUtilities.updateComponentTreeUI(JPanelConfigGeneral.this.getTopLevelAncestor());
-                    } catch (Exception e) {
+                    } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
+                        Logger.getLogger(JPanelConfigGeneral.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             });

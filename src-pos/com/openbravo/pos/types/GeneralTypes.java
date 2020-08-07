@@ -40,10 +40,10 @@ public class GeneralTypes implements IKeyed {
     public static int PROVEEDOR_DEL_EXTERIOR = 8;
     public static int CLIENTE_DEL_EXTERIOR = 9;
     public static int IVA_LIBERADO_LEY_19640 = 10;
-    public static int IVA_RESPONSABLE_INSCRIPTO_AGENTE_DE_PERCEPCIÓN = 11;
+    public static int IVA_RESPONSABLE_INSCRIPTO_AGENTE_DE_PERCEPCION = 11;
     public static int PEQUEÑO_CONTRIBUYENTE_EVENTUAL = 12;
     public static int MONOTRIBUTISTA_SOCIAL = 13;
-    public static int PEQUEÑO_CONTRIBUYENTE_EVENTUAL_SOCIAL = 14;
+    public static int PEQUENO_CONTRIBUYENTE_EVENTUAL_SOCIAL = 14;
 
     private int id;
     private String name;

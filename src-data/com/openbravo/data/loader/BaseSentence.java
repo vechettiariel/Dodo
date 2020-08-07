@@ -109,6 +109,7 @@ public abstract class BaseSentence implements SentenceList, SentenceFind, Senten
     }
 
     // Utilidades
+    @SuppressWarnings("unchecked")
     public final List fetchAll(DataResultSet SRS) throws BasicException {
         if (SRS == null) {
             throw new BasicException(LocalRes.getIntString("exception.nodataset"));
@@ -122,6 +123,7 @@ public abstract class BaseSentence implements SentenceList, SentenceFind, Senten
     }
 
     // Utilidades
+    @SuppressWarnings("unchecked")
     public final List fetchPage(DataResultSet SRS, int offset, int length) throws BasicException {
 
         if (SRS == null) {

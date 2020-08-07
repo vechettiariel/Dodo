@@ -57,10 +57,12 @@ public class ComboBoxValModel extends AbstractListModel implements ComboBoxModel
         this(new ArrayList(), KeyGetterBuilder.INSTANCE);
     }
 
+    @SuppressWarnings("unchecked")
     public void add(Object c) {
         m_aData.add(c);
     }
 
+    @SuppressWarnings("unchecked")
     public void add(int index, Object c) {
         m_aData.add(index, c);
     }
@@ -91,7 +93,7 @@ public class ComboBoxValModel extends AbstractListModel implements ComboBoxModel
     }
 
     public void setSelectedFirst() {
-        m_selected = (m_aData.size() == 0) ? null : m_aData.get(0);
+        m_selected = (m_aData.isEmpty()) ? null : m_aData.get(0);
     }
 
     public Object getElementByKey(Object aKey) {
@@ -107,18 +109,22 @@ public class ComboBoxValModel extends AbstractListModel implements ComboBoxModel
         return null;
     }
 
+    @Override
     public Object getElementAt(int index) {
         return m_aData.get(index);
     }
 
+    @Override
     public Object getSelectedItem() {
         return m_selected;
     }
 
+    @Override
     public int getSize() {
         return m_aData.size();
     }
 
+    @Override
     public void setSelectedItem(Object anItem) {
 
         if ((m_selected != null && !m_selected.equals(anItem)) || m_selected == null && anItem != null) {

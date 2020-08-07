@@ -16,35 +16,36 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.ticket;
 
 import java.util.*;
 
 public class Signumprovider {
-    
-    private Set m_positives = new HashSet();
-    private Set m_negatives = new HashSet();
-    
-    /** Creates a new instance of Signumprovider */
+
+    private final Set m_positives = new HashSet();
+    private final Set m_negatives = new HashSet();
+
+    /**
+     * Creates a new instance of Signumprovider
+     */
     public Signumprovider() {
     }
-    
+
     public void addPositive(Object key) {
         m_positives.add(key);
     }
-    
+
     public void addNegative(Object key) {
         m_negatives.add(key);
     }
-    
+
     public Double correctSignum(Object key, Double value) {
         if (m_positives.contains(key)) {
-            return value.doubleValue() < 0.0 ? new Double(-value.doubleValue()) : value;
+            return value < 0.0 ? -value : value;
         } else if (m_negatives.contains(key)) {
-            return value.doubleValue() > 0.0 ? new Double(-value.doubleValue()) : value;
+            return value > 0.0 ? -value : value;
         } else {
             return value;
-        }        
-    }    
+        }
+    }
 }

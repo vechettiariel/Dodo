@@ -38,6 +38,7 @@ public class JListData extends javax.swing.JDialog {
         return showList(new MyListData(data));       
     }  
     
+    @SuppressWarnings("unchecked")
     public Object showList(javax.swing.ListModel model) {
         
         m_jData.setModel(model);
@@ -52,16 +53,18 @@ public class JListData extends javax.swing.JDialog {
     
     private static class MyListData extends javax.swing.AbstractListModel {
         
-        private List m_data;
+        private final List m_data;
         
         public MyListData(List data) {
             m_data = data;
         }
         
+        @Override
         public Object getElementAt(int index) {
             return m_data.get(index);
         }
         
+        @Override
         public int getSize() {
             return m_data.size();
         } 

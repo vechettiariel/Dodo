@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.data.user;
 
 import java.awt.event.*;
@@ -26,66 +25,81 @@ import java.beans.*;
 
 /**
  *
- * @author  adrian
+ * @author adrian
  */
 public class DirtyManager implements DocumentListener, ChangeListener, ActionListener, PropertyChangeListener {
-    
-    private boolean m_bDirty;    
-    protected Vector listeners = new Vector();
-    
-    /** Creates a new instance of DirtyManager */
+
+    private boolean m_bDirty;
+    protected List listeners = new ArrayList<>();
+
+    /**
+     * Creates a new instance of DirtyManager
+     */
     public DirtyManager() {
         m_bDirty = false;
     }
-    
+
+    @SuppressWarnings("unchecked")
     public void addDirtyListener(DirtyListener l) {
         listeners.add(l);
     }
+
     public void removeDirtyListener(DirtyListener l) {
         listeners.remove(l);
     }
+
     protected void fireChangedDirty() {
-        
-        Enumeration e = listeners.elements();
-        while (e.hasMoreElements()) {
-            DirtyListener l = (DirtyListener) e.nextElement();
+
+        for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+            DirtyListener l = (DirtyListener) iterator.next();
             l.changedDirty(m_bDirty);
+
         }
+
     }
-    
+
     public void setDirty(boolean bValue) {
-        
+
         if (m_bDirty != bValue) {
             m_bDirty = bValue;
             fireChangedDirty();
         }
     }
+
     public boolean isDirty() {
         return m_bDirty;
     }
-    
+
+    @Override
     public void changedUpdate(DocumentEvent e) {
         setDirty(true);
     }
+
+    @Override
     public void insertUpdate(DocumentEvent e) {
         setDirty(true);
-    }    
+    }
+
+    @Override
     public void removeUpdate(DocumentEvent e) {
         setDirty(true);
-    }    
-    
+    }
+
+    @Override
     public void stateChanged(ChangeEvent e) {
         setDirty(true);
     }
-    
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         setDirty(true);
     }
-    
+
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         //if ("image".equals(evt.getPropertyName())) {
-            setDirty(true);
+        setDirty(true);
         //}
     }
-    
+
 }

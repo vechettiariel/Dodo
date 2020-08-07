@@ -16,23 +16,22 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.data.loader;
 
 import com.openbravo.basic.BasicException;
 
 /**
  *
- * @author  adrian
+ * @author adrian
  */
 public class QBFBuilder implements ISQLBuilderStatic {
-   
-    private String m_sSentNullFilter;   // la sentencia que se devuelve cuando el filtro es vacio
-    private String m_sSentBeginPart;  // La sentencia que se devuelve es m_sSentBeginPart + ( filtro ) + m_sSentEndPart
-    private String m_sSentEndPart;
-    
-    private String[] m_asFindFields;    
-    
+
+    private final String m_sSentNullFilter;   // la sentencia que se devuelve cuando el filtro es vacio
+    private final String m_sSentBeginPart;  // La sentencia que se devuelve es m_sSentBeginPart + ( filtro ) + m_sSentEndPart
+    private final String m_sSentEndPart;
+
+    private final String[] m_asFindFields;
+
 //    /** Creates a new instance of QBFBuilder */
 //    public QBFBuilder(TableDefinition tb, String[] asFindFields) {
 //        StringBuffer sent = new StringBuffer();
@@ -65,66 +64,77 @@ public class QBFBuilder implements ISQLBuilderStatic {
         m_asFindFields = asFindFields;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public String getSQL(SerializerWrite sw, Object params) throws BasicException {
-        
+
         QBFParameter mydw = new QBFParameter(m_asFindFields);
         if (sw == null || params == null) {
             return m_sSentNullFilter;
         } else {
             sw.writeValues(mydw, params);
             String sFilter = mydw.getFilter();
-            if (sFilter.length() == 0) { 
+            if (sFilter.length() == 0) {
                 return m_sSentNullFilter; // no hay filtro
             } else {
                 return m_sSentBeginPart + "(" + sFilter + ")" + m_sSentEndPart; // incluimos el filtro
             }
-        }          
-    }  
-    
+        }
+    }
+
     private static class QBFParameter implements DataWrite {
-    
-        private String[] m_asFindFields;
-        private QBFCompareEnum[] m_aiCondFields;
-        private String[] m_aParams;
-        
+
+        private final String[] m_asFindFields;
+        private final QBFCompareEnum[] m_aiCondFields;
+        private final String[] m_aParams;
+
         public QBFParameter(String[] asFindFields) {
             m_asFindFields = asFindFields;
             m_aiCondFields = new QBFCompareEnum[asFindFields.length];
             m_aParams = new String[asFindFields.length];
-            
-            for( int i = 0; i < m_aParams.length; i++) {
+
+            for (int i = 0; i < m_aParams.length; i++) {
                 m_aParams[i] = DataWriteUtils.getSQLValue((Object) null);
             }
         }
-        
+
+        @Override
         public void setDouble(int paramIndex, Double dValue) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 throw new BasicException(LocalRes.getIntString("exception.nocompare"));
             } else {
                 m_aParams[(paramIndex - 1) / 2] = DataWriteUtils.getSQLValue(dValue);
             }
-        }        
+        }
+
+        @Override
         public void setBoolean(int paramIndex, Boolean bValue) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 throw new BasicException(LocalRes.getIntString("exception.nocompare"));
             } else {
                 m_aParams[(paramIndex - 1) / 2] = DataWriteUtils.getSQLValue(bValue);
             }
-        }        
+        }
+
+        @Override
         public void setInt(int paramIndex, Integer iValue) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 throw new BasicException(LocalRes.getIntString("exception.nocompare"));
             } else {
                 m_aParams[(paramIndex - 1) / 2] = DataWriteUtils.getSQLValue(iValue);
             }
-        }       
+        }
+
+        @Override
         public void setString(int paramIndex, String sValue) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 throw new BasicException(LocalRes.getIntString("exception.nocompare"));
             } else {
                 m_aParams[(paramIndex - 1) / 2] = DataWriteUtils.getSQLValue(sValue);
             }
-        }        
+        }
+
+        @Override
         public void setTimestamp(int paramIndex, java.util.Date dValue) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 throw new BasicException(LocalRes.getIntString("exception.nocompare"));
@@ -139,6 +149,8 @@ public class QBFBuilder implements ISQLBuilderStatic {
 //                throw new DataException("Param type not allowed");
 //            }            
 //        }
+
+        @Override
         public void setBytes(int paramIndex, byte[] value) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 throw new BasicException(LocalRes.getIntString("exception.nocompare"));
@@ -146,6 +158,8 @@ public class QBFBuilder implements ISQLBuilderStatic {
                 throw new BasicException("Param type not allowed");
             }
         }
+
+        @Override
         public void setObject(int paramIndex, Object value) throws BasicException {
             if ((paramIndex - 1) % 2 == 0) {
                 if (value instanceof QBFCompareEnum) {
@@ -157,24 +171,24 @@ public class QBFBuilder implements ISQLBuilderStatic {
                 m_aParams[(paramIndex - 1) / 2] = DataWriteUtils.getSQLValue(value);
             }
         }
-        
+
         public String getFilter() {
             // El retorno debe ser siempre una expresion valida puesto que no se donde sera insertada.
-            
-            StringBuffer sFilter = new StringBuffer();
-            
-            String sItem;                
-            for (int i = 0; i < m_asFindFields.length; i ++) {
-                sItem = m_aiCondFields[i].getExpression(m_asFindFields[i], m_aParams[i]);           
+
+            StringBuilder sFilter = new StringBuilder();
+
+            String sItem;
+            for (int i = 0; i < m_asFindFields.length; i++) {
+                sItem = m_aiCondFields[i].getExpression(m_asFindFields[i], m_aParams[i]);
                 if (sItem != null) {
                     if (sFilter.length() > 0) {
                         sFilter.append(" AND ");
                     }
                     sFilter.append(sItem);
-                }                
+                }
             }
 
             return sFilter.toString();
-        }                
-    }   
+        }
+    }
 }

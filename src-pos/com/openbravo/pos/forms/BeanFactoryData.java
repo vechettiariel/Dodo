@@ -16,37 +16,48 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.forms;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
  * @author adrianromero
  */
 public class BeanFactoryData implements BeanFactoryApp {
-    
+
     private BeanFactoryApp bf;
-    
-    /** Creates a new instance of BeanFactoryData */
+
+    /**
+     * Creates a new instance of BeanFactoryData
+     */
     public BeanFactoryData() {
     }
-    
-    public void init(AppView app) throws BeanFactoryException {  
-        
+
+    @Override
+    public void init(AppView app) throws BeanFactoryException {
+
         try {
-            
+
             String sfactoryname = this.getClass().getName();
             if (sfactoryname.endsWith("Create")) {
                 sfactoryname = sfactoryname.substring(0, sfactoryname.length() - 6);
             }
-            bf = (BeanFactoryApp) Class.forName(sfactoryname + app.getSession().DB.getName()).newInstance();
-            bf.init(app);                     
-        } catch (Exception ex) {
+
+            String className = sfactoryname + app.getSession().DB.getName();
+
+            Class<?> clazz = Class.forName(className).asSubclass(BeanFactoryApp.class);
+
+            bf = (BeanFactoryApp) clazz.getDeclaredConstructor().newInstance();
+
+            bf.init(app);
+        } catch (BeanFactoryException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
             throw new BeanFactoryException(ex);
         }
-    }   
-    
+    }
+
+    @Override
     public Object getBean() {
         return bf.getBean();
-    }         
+    }
 }

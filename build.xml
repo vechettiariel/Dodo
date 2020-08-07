@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 <!-- 
-    Openbravo POS is a point of sales application designed for touch screens.
-    Copyright (C) 2008-2009 Openbravo, S.L.
-    http://sourceforge.net/projects/openbravopos
+   Openbravo POS is a point of sales application designed for touch screens.
+   Copyright (C) 2008-2009 Openbravo, S.L.
+   http://sourceforge.net/projects/openbravopos
 
-    This file is part of Openbravo POS.
+   This file is part of Openbravo POS.
 
-    Openbravo POS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Openbravo POS is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-    Openbravo POS is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+   Openbravo POS is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
- -->
+   You should have received a copy of the GNU General Public License
+   along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
+-->
 
 <project name="dodo" basedir="." default="dist">
     <!-- ================================================================= -->
@@ -32,7 +32,7 @@
     <property name="javac.deprecation" value="off"/>
     <property name="javac.optimize" value="on"/>
     <property name="javac.debug" value="off"/>
-    <property name="javac.minVMVersion" value="1.10"/>
+    <property name="javac.minVMVersion" value="14"/>
     <!-- read in property files -->
     <property file="build.properties" />
     <property name="src.pos" value="${basedir}/src-pos"/>
@@ -81,13 +81,13 @@
     </target>
 
     <target name="init.installer.pda">
-	    <mkdir dir="${dest.installer.pda}" />
+        <mkdir dir="${dest.installer.pda}" />
     </target>
 
     <!-- ================================================================= -->
     <!-- C O M P I L E                                                     -->
     <!-- ================================================================= -->
-    <target name="compilebeans" depends="init.classes">
+    <target name="compilebeans" depends="init.classes" >
         <mkdir dir="${dest.classes}/beans" />
         <javac srcdir="${src.beans}"
                destdir="${dest.classes}/beans"
@@ -106,8 +106,8 @@
             </fileset>
         </copy>                
     </target>
-    <target name="compiledata" depends="init.classes,compilebeans">
-        <mkdir dir="${dest.classes}/data" />
+    <target name="compiledata" depends="init.classes,compilebeans" >
+	<mkdir dir="${dest.classes}/data" />
         <javac srcdir="${src.data}"
                destdir="${dest.classes}/data"
                debug="${javac.debug}"
@@ -117,7 +117,7 @@
             <classpath>
                 <pathelement location="${dest.classes}/beans"/>
             </classpath>
-		</javac>
+        </javac>
         <copy todir="${dest.classes}/data">
             <fileset dir="${src.data}">
                 <exclude name="**/*.java"/>
@@ -128,18 +128,19 @@
             </fileset>
         </copy>                
     </target>
-    <target name="compilepos" depends="init.classes,compilebeans,compiledata">
+    <target name="compilepos" depends="init.classes,compilebeans,compiledata" >
         <mkdir dir="${dest.classes}/pos" />
-        <javac srcdir="${src.pos}"
+        <javac srcdir="${src.pos}" 
+			   encoding="cp1252"
                destdir="${dest.classes}/pos"
                debug="${javac.debug}"
                deprecation="${javac.deprecation}"
                optimize="${javac.optimize}"
                target="${javac.minVMVersion}">
             <classpath>
-                  <fileset dir="${basedir}/lib">
+                <fileset dir="${basedir}/lib">
                     <include name="**/*.jar"/>
-                  </fileset>
+                </fileset>
                 <pathelement location="${dest.classes}/beans"/>
                 <pathelement location="${dest.classes}/data"/>
             </classpath>
@@ -163,9 +164,9 @@
                optimize="${javac.optimize}"
                target="${javac.minVMVersion}">
             <classpath>
-                  <fileset dir="${basedir}/lib">
+                <fileset dir="${basedir}/lib">
                     <include name="**/*.jar"/>
-                  </fileset>
+                </fileset>
                 <pathelement location="${dest.classes}/beans"/>
                 <pathelement location="${dest.classes}/data"/>
                 <pathelement location="${dest.classes}/pos"/>
@@ -195,7 +196,7 @@
             <fileset dir="${dest.classes}/beans"/>
             <fileset dir="${dest.classes}/data"/>
             <fileset dir="${dest.classes}/pos"/>
-         <!--   <fileset dir="${dest.classes}/erp"/>-->
+            <!--   <fileset dir="${dest.classes}/erp"/>-->
         </copy>  
         <mkdir dir="${dest.jar}" />
         <jar jarfile="${dest.jar}/dodo.jar"
@@ -206,7 +207,7 @@
                 <attribute name="Implementation-Title" value="Dodo POS"/>
                 <attribute name="Implementation-Version" value="${version}"/>
                 <attribute name="Main-Class" value="com.openbravo.pos.forms.StartPOS" />
-    	    </manifest>
+            </manifest>
         </jar>
         <delete dir="${basedir}/build/zip" />
     </target>
@@ -222,11 +223,11 @@
              compress="true"
              basedir="${lib}/Linux/i686-unknown-linux-gnu">
         </jar>
-    	<jar jarfile="${dest.jar}/linux-ia64-native.jar"
+        <jar jarfile="${dest.jar}/linux-ia64-native.jar"
              compress="true"
              basedir="${lib}/Linux/ia64-unkown-linux-gnu">
         </jar>
-    	<jar jarfile="${dest.jar}/linux-x86_64-native.jar"
+        <jar jarfile="${dest.jar}/linux-x86_64-native.jar"
              compress="true"
              basedir="${lib}/Linux/x86_64-unknown-linux-gnu">
         </jar>
@@ -234,7 +235,7 @@
              compress="true"
              basedir="${lib}/Mac_OS_X">
         </jar>
-    	<jar jarfile="${dest.jar}/sparc32-native.jar"
+        <jar jarfile="${dest.jar}/sparc32-native.jar"
              compress="true"
              basedir="${lib}/Solaris/sparc-solaris/sparc32-sun-solaris2.8">
         </jar>
@@ -365,7 +366,7 @@
                 <include name="**/*.*"/>
             </fileset>
         </copy>
-	<mkdir dir="${basedir}/build/zip/logs" />
+        <mkdir dir="${basedir}/build/zip/logs" />
         <copy file="${dest.war}/${name}_${version}_pda.war" todir="${basedir}/build/zip/webapps" />
         <copy file="${basedir}/installer/pda/start.sh" todir="${basedir}/build/zip" />
         <copy file="${basedir}/installer/pda/start.bat" todir="${basedir}/build/zip" />
@@ -458,7 +459,7 @@
     <!-- ================================================================= -->
 
     <target name="installer" depends="installer.pos" 
-			description="Generate installers of POS for all predefined platforms">	
+            description="Generate installers of POS for all predefined platforms">	
     </target>
 
     <!-- ================================================================= -->
@@ -466,51 +467,51 @@
     <!-- ================================================================= -->
 
     <target name="installer.pos" depends="installer.pos.linux, installer.pos.linux-x64, installer.pos.linux-ia64, installer.pos.windows, installer.pos.osx, installer.pos.solaris-intel"
-			description="Generate installers for all predefined platforms">
+            description="Generate installers for all predefined platforms">
     </target>
 
     <target name="installer.pos.linux" depends="init.installer.pos, jar" description="Generate an installer for Linux">
-    	<exec executable="${bitrock}/bin/builder" failonerror="true">
-	    <arg value="build"/>
-	    <arg value="${basedir}/installer/installer.xml" />
-	    <arg value="linux" /> 
-    	</exec>
+        <exec executable="${bitrock}/bin/builder" failonerror="true">
+            <arg value="build"/>
+            <arg value="${basedir}/installer/installer.xml" />
+            <arg value="linux" /> 
+        </exec>
     </target>
-   <target name="installer.pos.linux-x64" depends="init.installer.pos, jar" description="Generate an installer for Linux x64">
-	<exec executable="${bitrock}/bin/builder" failonerror="true">
-	    <arg value="build"/>
-	    <arg value="${basedir}/installer/installer.xml" />
-	    <arg value="linux-x64" /> 
-    	</exec> 
+    <target name="installer.pos.linux-x64" depends="init.installer.pos, jar" description="Generate an installer for Linux x64">
+        <exec executable="${bitrock}/bin/builder" failonerror="true">
+            <arg value="build"/>
+            <arg value="${basedir}/installer/installer.xml" />
+            <arg value="linux-x64" /> 
+        </exec> 
     </target>
-   <target name="installer.pos.linux-ia64" depends="init.installer.pos, jar" description="Generate an installer for Linux ia64">
-	<exec executable="${bitrock}/bin/builder" failonerror="true">
-	    <arg value="build"/>
-	    <arg value="${basedir}/installer/installer.xml" />
-	    <arg value="linux-ia64" /> 
-    	</exec> 
+    <target name="installer.pos.linux-ia64" depends="init.installer.pos, jar" description="Generate an installer for Linux ia64">
+        <exec executable="${bitrock}/bin/builder" failonerror="true">
+            <arg value="build"/>
+            <arg value="${basedir}/installer/installer.xml" />
+            <arg value="linux-ia64" /> 
+        </exec> 
     </target>
     <target name="installer.pos.windows" depends="init.installer.pos, jar" description="Generate an installer for Windows">
-    	<exec executable="${bitrock}/bin" failonerror="true">
-<!--	<exec executable="${bitrock}/bin/builder" failonerror="true">   -->
-	    <arg value="build"/>
-	    <arg value="${basedir}/installer/installer.xml" />
-	    <arg value="windows" /> 
-    	</exec> 
+        <exec executable="${bitrock}/bin" failonerror="true">
+            <!--	<exec executable="${bitrock}/bin/builder" failonerror="true">   -->
+            <arg value="build"/>
+            <arg value="${basedir}/installer/installer.xml" />
+            <arg value="windows" /> 
+        </exec> 
     </target>
-   <target name="installer.pos.osx" depends="init.installer.pos, jar" description="Generate an installer for OSX">
-	<exec executable="${bitrock}/bin/builder" failonerror="true">
-	    <arg value="build"/>
-	    <arg value="${basedir}/installer/installer.xml" />
-	    <arg value="osx" /> 
-    	</exec> 
+    <target name="installer.pos.osx" depends="init.installer.pos, jar" description="Generate an installer for OSX">
+        <exec executable="${bitrock}/bin/builder" failonerror="true">
+            <arg value="build"/>
+            <arg value="${basedir}/installer/installer.xml" />
+            <arg value="osx" /> 
+        </exec> 
     </target>
-   <target name="installer.pos.solaris-intel" depends="init.installer.pos, jar" description="Generate an installer for Solaris-Intel">
-	<exec executable="${bitrock}/bin/builder" failonerror="true">
-	    <arg value="build"/>
-	    <arg value="${basedir}/installer/installer.xml" />
-	    <arg value="solaris-intel" /> 
-    	</exec> 
+    <target name="installer.pos.solaris-intel" depends="init.installer.pos, jar" description="Generate an installer for Solaris-Intel">
+        <exec executable="${bitrock}/bin/builder" failonerror="true">
+            <arg value="build"/>
+            <arg value="${basedir}/installer/installer.xml" />
+            <arg value="solaris-intel" /> 
+        </exec> 
     </target>
 
    
@@ -518,28 +519,28 @@
     <!-- J W S                                     			   -->
     <!-- ================================================================= -->
 
-   <target name="jws" depends="copy-libraries-up, sign-jars"/>	
+    <target name="jws" depends="copy-libraries-up, sign-jars"/>	
 
-   <target name="keystore">
+    <target name="keystore">
         <property name="jnlp.signjar.keystore" value="keystore"/>
         <property name="jnlp.signjar.storepass" value="changeit"/>
         <property name="jnlp.signjar.keypass" value="changeit"/>
         <property name="jnlp.signjar.alias" value="key"/>
-   </target>
+    </target>
 
-   <target name="init-keystore" depends="keystore">
+    <target name="init-keystore" depends="keystore">
         <echo message="Going to create default keystore in ${jnlp.signjar.keystore}"/> 
-	<genkey keystore="${dest.dist}/jws/${jnlp.signjar.keystore}" alias="${dest.dist}/jws/${jnlp.signjar.alias}" storepass="${dest.dist}/jws/${jnlp.signjar.storepass}" >
-  		<dname>
-    			<param name="CN" value="Openbravo POS Network"/>
-    			<param name="OU" value="Openbravo POS Network"/>
-    			<param name="O"  value="Openbravo, S.L."/>
-    			<param name="C"  value="ES"/>
-  		</dname>
-	</genkey>
-   </target>
+        <genkey keystore="${dest.dist}/jws/${jnlp.signjar.keystore}" alias="${dest.dist}/jws/${jnlp.signjar.alias}" storepass="${dest.dist}/jws/${jnlp.signjar.storepass}" >
+            <dname>
+                <param name="CN" value="Openbravo POS Network"/>
+                <param name="OU" value="Openbravo POS Network"/>
+                <param name="O"  value="Openbravo, S.L."/>
+                <param name="C"  value="ES"/>
+            </dname>
+        </genkey>
+    </target>
 
-   <target name="sign-jars" depends="init-keystore">
+    <target name="sign-jars" depends="init-keystore">
         <signjar keystore="${dest.dist}/jws/${jnlp.signjar.keystore}" storepass="${dest.dist}/jws/${jnlp.signjar.storepass}"
                  alias="${dest.dist}/jws/${jnlp.signjar.alias}" >
             <fileset dir="${dest.dist}/jws">
@@ -549,37 +550,37 @@
                 <include name="*.jar"/>
             </fileset>
         </signjar>
-   </target>
-   <target name="copy-libraries-up" depends="jar-reports-and-locales, jar-native-libraries, jar">
-	<mkdir dir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/linux-i686-native.jar" 
-	      todir="${dest.dist}/jws"/>
- 	<copy file="${dest.jar}/linux-ia64-native.jar" 
-	      todir="${dest.dist}/jws"/>
+    </target>
+    <target name="copy-libraries-up" depends="jar-reports-and-locales, jar-native-libraries, jar">
+        <mkdir dir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/linux-i686-native.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/linux-ia64-native.jar" 
+              todir="${dest.dist}/jws"/>
 
-	<copy file="${dest.jar}/linux-x86_64-native.jar" 
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/osx-native.jar" 
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/sparc32-native.jar" 
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/sparc64-native.jar"
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/windows-native.jar" 
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/openbravopos.jar"
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/locales.jar" 
-	      todir="${dest.dist}/jws"/>
-	<copy file="${dest.jar}/reports.jar" 
-	      todir="${dest.dist}/jws"/>
-	<copy file="${basedir}/dodo-logo-128.png" 
-	      todir="${dest.dist}/jws"/>
-	<copy todir="${dest.dist}/jws/lib">
-    	    <fileset dir="lib"/>
+        <copy file="${dest.jar}/linux-x86_64-native.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/osx-native.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/sparc32-native.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/sparc64-native.jar"
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/windows-native.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/openbravopos.jar"
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/locales.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${dest.jar}/reports.jar" 
+              todir="${dest.dist}/jws"/>
+        <copy file="${basedir}/dodo-logo-128.png" 
+              todir="${dest.dist}/jws"/>
+        <copy todir="${dest.dist}/jws/lib">
+            <fileset dir="lib"/>
         </copy> 
         <copy file="${basedir}/launch.jnlp" 
-	      todir="${dest.dist}/jws"/>
-   </target>
+              todir="${dest.dist}/jws"/>
+    </target>
 
 </project>

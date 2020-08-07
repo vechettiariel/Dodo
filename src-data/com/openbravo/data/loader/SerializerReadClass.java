@@ -16,31 +16,33 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.data.loader;
 
 import com.openbravo.basic.BasicException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class SerializerReadClass implements SerializerRead {
 
-    private Class m_clazz;
-    
-    /** Creates a new instance of DefaultSerializerRead */
+    private final Class m_clazz;
+
+    /**
+     * Creates a new instance of DefaultSerializerRead
+     *
+     * @param clazz
+     */
     public SerializerReadClass(Class clazz) {
         m_clazz = clazz;
     }
-    
+
+    @Override
     public Object readValues(DataRead dr) throws BasicException {
         try {
-            SerializableRead sr = (SerializableRead) m_clazz.newInstance();
+            SerializableRead sr = (SerializableRead) m_clazz.getConstructor().newInstance();
             sr.readValues(dr);
             return sr;
-        } catch (java.lang.InstantiationException eIns) {
-            return null;
-        } catch (IllegalAccessException eIA) {
-            return null;
-        } catch (ClassCastException eCC) {
-            return null;
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new BasicException(ex);
         }
     }
 }

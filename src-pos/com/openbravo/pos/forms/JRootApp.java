@@ -44,6 +44,7 @@ import com.openbravo.pos.scanpal2.DeviceScanner;
 import com.openbravo.pos.scanpal2.DeviceScannerFactory;
 import com.openbravo.pos.validation.IInvoiceValidation;
 import com.openbravo.pos.validation.InvoiceValidation;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -325,10 +326,12 @@ public class JRootApp extends JPanel implements AppView {
         m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
     }
 
+    @Override
     public AppProperties getProperties() {
         return m_props;
     }
 
+    @Override
     public Object getBean(String beanfactory) throws BeanFactoryException {
 
         // For backwards compatibility
@@ -346,7 +349,7 @@ public class JRootApp extends JPanel implements AppView {
                     Class bfclass = Class.forName(beanfactory);
 
                     if (BeanFactory.class.isAssignableFrom(bfclass)) {
-                        bf = (BeanFactory) bfclass.newInstance();
+                        bf = (BeanFactory) bfclass.getDeclaredConstructor().newInstance();
                     } else {
                         // the old construction for beans...
                         Constructor constMyView = bfclass.getConstructor(new Class[]{AppView.class});
@@ -355,7 +358,7 @@ public class JRootApp extends JPanel implements AppView {
                         bf = new BeanFactoryObj(bean);
                     }
 
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
                     // ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
                     throw new BeanFactoryException(e);
                 }
@@ -380,7 +383,7 @@ public class JRootApp extends JPanel implements AppView {
     }
 
     private static void initOldClasses() {
-        m_oldclasses = new HashMap<String, String>();
+        m_oldclasses = new HashMap<>();
 
         // update bean names from 2.00 to 2.20    
         m_oldclasses.put("com.openbravo.pos.reports.JReportCustomers", "/com/openbravo/reports/customers.bs");
@@ -403,14 +406,17 @@ public class JRootApp extends JPanel implements AppView {
 
     }
 
+    @Override
     public void waitCursorBegin() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
+    @Override
     public void waitCursorEnd() {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
+    @Override
     public AppUserView getAppUserView() {
         return m_principalapp;
     }
@@ -459,7 +465,6 @@ public class JRootApp extends JPanel implements AppView {
             jScrollPane1.getViewport().setView(jPeople);
 
         } catch (BasicException ee) {
-            ee.printStackTrace();
         }
     }
 
@@ -471,7 +476,7 @@ public class JRootApp extends JPanel implements AppView {
     // La accion del selector
     private class AppUserAction extends AbstractAction {
 
-        private AppUser m_actionuser;
+        private final AppUser m_actionuser;
 
         public AppUserAction(AppUser user) {
             m_actionuser = user;
@@ -483,6 +488,7 @@ public class JRootApp extends JPanel implements AppView {
             return m_actionuser;
         }
 
+        @Override
         public void actionPerformed(ActionEvent evt) {
             // String sPassword = m_actionuser.getPassword();
             if (m_actionuser.authenticate()) {
@@ -564,6 +570,7 @@ public class JRootApp extends JPanel implements AppView {
         inputtext = new StringBuffer();
         m_txtKeys.setText(null);
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 m_txtKeys.requestFocus();
             }
@@ -578,7 +585,6 @@ public class JRootApp extends JPanel implements AppView {
             try {
                 user = m_dlSystem.findPeopleByCard(inputtext.toString());
             } catch (BasicException e) {
-                e.printStackTrace();
             }
 
             if (user == null) {

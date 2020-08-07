@@ -35,14 +35,17 @@ import java.util.Date;
  */
 public final class PaymentsEditor extends javax.swing.JPanel implements EditorRecord {
 
-    private ComboBoxValModel m_ReasonModel;
+    private final ComboBoxValModel m_ReasonModel;
     private String m_sId;
     private String m_sPaymentId;
     private Date datenew;
-    private AppView m_App;
+    private final AppView m_App;
 
     /**
      * Creates new form JPanelPayments
+     *
+     * @param oApp
+     * @param dirty
      */
     public PaymentsEditor(AppView oApp, DirtyManager dirty) {
 
@@ -92,13 +95,13 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         Object[] payment = (Object[]) value;
         m_sId = (String) payment[0];
         datenew = (Date) payment[2];
-         m_sPaymentId = (String) payment[3];
+        m_sPaymentId = (String) payment[3];
         setReasonTotal(payment[4], payment[5]);
         jTextArea.setText((String) payment[6]);
         m_jreason.setEnabled(false);
         jTotal.setEnabled(false);
         jTextArea.setEnabled(false);
-       
+
     }
 
     @Override
@@ -127,7 +130,7 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         Double dtotal = jTotal.getDoubleValue();
         payment[5] = reason == null ? dtotal : reason.addSignum(dtotal);
         payment[6] = jTextArea.getText();
-         
+
         return payment;
     }
 
@@ -155,8 +158,8 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
 
     private static abstract class PaymentReason implements IKeyed {
 
-        private String m_sKey;
-        private String m_sText;
+        private final String m_sKey;
+        private final String m_sText;
 
         public PaymentReason(String key, String text) {
             m_sKey = key;
@@ -193,8 +196,8 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
         public Double addSignum(Double d) {
             if (d == null) {
                 return null;
-            } else if (d.doubleValue() < 0.0) {
-                return new Double(-d.doubleValue());
+            } else if (d < 0.0) {
+                return -d;
             } else {
                 return d;
             }
@@ -209,15 +212,15 @@ public final class PaymentsEditor extends javax.swing.JPanel implements EditorRe
 
         @Override
         public Double positivize(Double d) {
-            return d == null ? null : new Double(-d.doubleValue());
+            return d == null ? null : -d;
         }
 
         @Override
         public Double addSignum(Double d) {
             if (d == null) {
                 return null;
-            } else if (d.doubleValue() > 0.0) {
-                return new Double(-d.doubleValue());
+            } else if (d > 0.0) {
+                return -d;
             } else {
                 return d;
             }

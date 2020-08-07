@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.swing.UIManager;
 import com.openbravo.format.Formats;
 import com.openbravo.pos.instance.InstanceQuery;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -30,7 +31,6 @@ import javax.swing.LookAndFeel;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.api.SubstanceSkin;
-
 
 /**
  *
@@ -92,15 +92,15 @@ public class StartPOS {
                 // Set the look and feel.
                 try {
 
-                    Object laf = Class.forName(config.getProperty("swing.defaultlaf")).newInstance();
+                    Object laf = Class.forName(config.getProperty("swing.defaultlaf")).getDeclaredConstructor().newInstance();
 
                     if (laf instanceof LookAndFeel) {
                         UIManager.setLookAndFeel((LookAndFeel) laf);
                     } else if (laf instanceof SubstanceSkin) {
                         SubstanceLookAndFeel.setSkin((SubstanceSkin) laf);
                     }
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-                    logger.log(Level.WARNING, "Cannot set look and feel", e);
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
+                    logger.log(Level.WARNING, "Cannot set look and feel", ex);
                 }
 
                 String screenmode = config.getProperty("machine.screenmode");

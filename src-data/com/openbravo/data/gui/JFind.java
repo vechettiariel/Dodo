@@ -43,6 +43,7 @@ public class JFind extends JDialog {
         super(parent, modal);
     }
 
+    @SuppressWarnings("unchecked")
     private FindInfo init(FindInfo lastFindInfo) throws BasicException {
 
         initComponents();
@@ -53,8 +54,8 @@ public class JFind extends JDialog {
         m_jFind.setText(lastFindInfo.getText());
         // Pinto la caja
         m_jWhere.removeAllItems();
-        for (int i = 0; i < lastFindInfo.getVectorer().getHeaders().length; i++) {
-            m_jWhere.addItem(lastFindInfo.getVectorer().getHeaders()[i]);
+        for (String header : lastFindInfo.getVectorer().getHeaders()) {
+            m_jWhere.addItem(header);
         }
         m_jWhere.setSelectedIndex(lastFindInfo.getField());
         // El Match

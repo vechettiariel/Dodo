@@ -62,14 +62,8 @@ public class AppViewConnection {
 
              return new Session(props.getProperty("db.URL"), sDBUser,sDBPassword);     
 
-        } catch (InstantiationException e) {
+        } catch (InstantiationException | IllegalAccessException | MalformedURLException | ClassNotFoundException e) {
             throw new BasicException(AppLocal.getIntString("message.databasedrivererror"), e);
-        } catch (IllegalAccessException eIA) {
-            throw new BasicException(AppLocal.getIntString("message.databasedrivererror"), eIA);
-        } catch (MalformedURLException eMURL) {
-            throw new BasicException(AppLocal.getIntString("message.databasedrivererror"), eMURL);
-        } catch (ClassNotFoundException eCNF) {
-            throw new BasicException(AppLocal.getIntString("message.databasedrivererror"), eCNF);
         } catch (SQLException eSQL) {
             throw new BasicException(AppLocal.getIntString("message.databaseconnectionerror"), eSQL);
         }   

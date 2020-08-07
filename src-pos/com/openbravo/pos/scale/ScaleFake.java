@@ -16,17 +16,19 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.scale;
 
 public class ScaleFake implements Scale {
-    
-    /** Creates a new instance of ScaleFake */
+
+    /**
+     * Creates a new instance of ScaleFake
+     */
     public ScaleFake() {
     }
-    
+
+    @Override
     public Double readWeight() throws ScaleException {
-        return new Double(Math.random() * 2.0);
+        return Math.random() * 2.0;
     }
-    
+
 }
