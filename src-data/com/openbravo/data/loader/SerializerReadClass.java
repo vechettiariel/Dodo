@@ -19,7 +19,6 @@
 package com.openbravo.data.loader;
 
 import com.openbravo.basic.BasicException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class SerializerReadClass implements SerializerRead {
