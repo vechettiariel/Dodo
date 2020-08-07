@@ -76,26 +76,26 @@ public class GeneralTypes implements IKeyed {
 
     @Override
     public String toString() {
-        return name ;
+        return name;
     }
-    
+
     public static List getTypesResponsible() {
         ArrayList<TypeResposibleInfo> type_list = new ArrayList<>();
 
-        type_list.add(new TypeResposibleInfo("1", "IVA Responsable Inscripto"));
-        type_list.add(new TypeResposibleInfo("2", "IVA Responsable no Inscripto"));
-        type_list.add(new TypeResposibleInfo("3", "IVA no Responsable"));
-        type_list.add(new TypeResposibleInfo("4", "IVA Sujeto Exento"));
-        type_list.add(new TypeResposibleInfo("5", "Consumidor Final"));
-        type_list.add(new TypeResposibleInfo("6", "Responsable Monotributo"));
-        type_list.add(new TypeResposibleInfo("7", "Sujeto no Categorizado"));
-        type_list.add(new TypeResposibleInfo("8", "Proveedor del Exterior"));
-        type_list.add(new TypeResposibleInfo("9", "Cliente del Exterior"));
-        type_list.add(new TypeResposibleInfo("10", "IVA Liberado – Ley Nº 19.640"));
-        type_list.add(new TypeResposibleInfo("11", "IVA Responsable Inscripto – Agente de Percepción"));
-        type_list.add(new TypeResposibleInfo("12", "Pequeño Contribuyente Eventual"));
-        type_list.add(new TypeResposibleInfo("13", "Monotributista Social"));
-        type_list.add(new TypeResposibleInfo("14", "Pequeño Contribuyente Eventual Social"));
+        type_list.add(new TypeResposibleInfo(1, "IVA Responsable Inscripto"));
+        type_list.add(new TypeResposibleInfo(2, "IVA Responsable no Inscripto"));
+        type_list.add(new TypeResposibleInfo(3, "IVA no Responsable"));
+        type_list.add(new TypeResposibleInfo(4, "IVA Sujeto Exento"));
+        type_list.add(new TypeResposibleInfo(5, "Consumidor Final"));
+        type_list.add(new TypeResposibleInfo(6, "Responsable Monotributo"));
+        type_list.add(new TypeResposibleInfo(7, "Sujeto no Categorizado"));
+        type_list.add(new TypeResposibleInfo(8, "Proveedor del Exterior"));
+        type_list.add(new TypeResposibleInfo(9, "Cliente del Exterior"));
+        type_list.add(new TypeResposibleInfo(10, "IVA Liberado – Ley Nº 19.640"));
+        type_list.add(new TypeResposibleInfo(11, "IVA Responsable Inscripto – Agente de Percepción"));
+        type_list.add(new TypeResposibleInfo(12, "Pequeño Contribuyente Eventual"));
+        type_list.add(new TypeResposibleInfo(13, "Monotributista Social"));
+        type_list.add(new TypeResposibleInfo(14, "Pequeño Contribuyente Eventual Social"));
 
         return type_list;
 

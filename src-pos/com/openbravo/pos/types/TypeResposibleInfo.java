@@ -13,19 +13,19 @@ import com.openbravo.data.loader.IKeyed;
  */
 public class TypeResposibleInfo implements IKeyed {
 
-    String id;
+    Integer id;
     String name;
 
-    public TypeResposibleInfo(String id, String name) {
+    public TypeResposibleInfo(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

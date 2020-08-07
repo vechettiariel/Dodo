@@ -318,7 +318,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
 
                 // new ticket
-                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, NUMBER, PERSON, CUSTOMER,VENDEDOR) VALUES (?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
+                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, NUMBER, PERSON, CUSTOMER,SELLER) VALUES (?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
                     @Override
                     public void writeValues() throws BasicException {
                         setString(1, ticket.getId());
@@ -634,7 +634,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
         public Object readValues(DataRead dr) throws BasicException {
             CustomerInfoExt c = new CustomerInfoExt(dr.getString(1));
             c.setDoc(dr.getString(2));
-            c.setDoctype(dr.getString(3));
+            c.setDoctype(dr.getInt(3));
             c.setSearchkey(dr.getString(4));
             c.setName(dr.getString(5));
             c.setCard(dr.getString(6));
