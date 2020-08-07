@@ -31,7 +31,7 @@ public class CustomerInfo implements Serializable {
     protected String id;
     protected String searchkey;
     protected String doc;
-    protected String doctype;
+    protected Integer doctype;
     protected String name;
 
     /**
@@ -59,11 +59,11 @@ public class CustomerInfo implements Serializable {
         this.doc = doc;
     }
 
-    public String getDoctype() {
+    public Integer getDoctype() {
         return doctype;
     }
 
-    public void setDoctype(String doctype) {
+    public void setDoctype(Integer doctype) {
         this.doctype = doctype;
     }
 
