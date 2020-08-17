@@ -46,6 +46,7 @@ public class ProviderInfo {
         m_sName = sName;
     }
     
+    @Override
     public String toString(){
         return m_sName;
     }

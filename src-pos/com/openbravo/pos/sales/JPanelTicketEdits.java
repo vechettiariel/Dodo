@@ -26,6 +26,10 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.pos.ticket.ProductInfoExt;
 import java.awt.Dimension;
 
+/**
+ *
+ * @author ariel
+ */
 public class JPanelTicketEdits extends JPanelTicket {
 
     private JTicketCatalogLines m_catandlines;

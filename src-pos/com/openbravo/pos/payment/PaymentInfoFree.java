@@ -16,28 +16,38 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.payment;
 
 public class PaymentInfoFree extends PaymentInfo {
-    
-    private double m_dTotal;
-   
-    /** Creates a new instance of PaymentInfoFree */
+
+    private final double m_dTotal;
+
+    /**
+     * Creates a new instance of PaymentInfoFree
+     *
+     * @param dTotal
+     */
     public PaymentInfoFree(double dTotal) {
         m_dTotal = dTotal;
     }
-    
-    public PaymentInfo copyPayment(){
+
+    @Override
+    public PaymentInfo copyPayment() {
         return new PaymentInfoFree(m_dTotal);
-    }    
+    }
+
+    @Override
     public String getName() {
         return "free";
-    }   
+    }
+
+    @Override
     public double getTotal() {
         return m_dTotal;
     }
-    public String getTransactionID(){
+
+    @Override
+    public String getTransactionID() {
         return "no ID";
     }
 }

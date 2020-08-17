@@ -32,6 +32,8 @@ public class UserInfo implements Serializable {
 
     /**
      * Creates a new instance of UserInfoBasic
+     * @param id
+     * @param name
      */
     public UserInfo(String id, String name) {
         m_sId = id;

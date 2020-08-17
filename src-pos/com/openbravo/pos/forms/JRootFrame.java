@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import com.openbravo.pos.instance.AppMessage;
 import com.openbravo.pos.instance.InstanceManager;
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import javax.imageio.ImageIO;
 
 /**
@@ -59,7 +60,7 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
                 // Register the running application
                 try {
                     m_instmanager = new InstanceManager(this);
-                } catch (Exception e) {
+                } catch (AlreadyBoundException | RemoteException e) {
                 }
             }
         
@@ -80,11 +81,13 @@ public class JRootFrame extends javax.swing.JFrame implements AppMessage {
         }
     }
     
+    @Override
     public void restoreWindow() throws RemoteException {
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 if (getExtendedState() == JFrame.ICONIFIED) {
-                    setExtendedState(JFrame.NORMAL);
+                    setExtendedState(JFrame.MAXIMIZED_BOTH);
                 }
                 requestFocus();
             }

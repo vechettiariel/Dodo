@@ -35,6 +35,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ *
+ * @author ariel
+ */
 public class JTicketsBagShared extends JTicketsBag {
 
     private String m_sCurrentTicket = null;
@@ -146,6 +150,7 @@ public class JTicketsBagShared extends JTicketsBag {
         saveCurrentTicket();
 
         TicketInfo ticket = new TicketInfo();
+     
         ticket.setPointSale(super.getPointSale());
         
         m_sCurrentTicket = UUID.randomUUID().toString(); // m_fmtid.format(ticket.getId());

@@ -41,7 +41,7 @@ import com.openbravo.pos.taxes.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
 import com.openbravo.pos.ticket.TicketTaxInfo;
-import com.openbravo.pos.ticket.TicketType;
+import com.openbravo.pos.ticket.TicketTypeInfo;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -160,7 +160,14 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     }
 
     public final SentenceList getTicketType() {
-        return new StaticSentence(s, "SELECT ID, NAME FROM TICKETTYPE ORDER BY ID", null, (DataRead dr) -> new TicketType(dr.getInt(1), dr.getString(2)));
+        return new StaticSentence(s, "SELECT ID, NAME FROM TICKETTYPE ORDER BY ID", null, (DataRead dr) -> new TicketTypeInfo(dr.getInt(1), dr.getString(2)));
+    }
+
+    public TicketTypeInfo getTicketType(int id) throws BasicException {
+        return (TicketTypeInfo) new PreparedSentence(s, "SELECT ID, NAME FROM TICKETTYPE WHERE ID = ?", null, (DataRead dr) -> {
+            return new TicketTypeInfo(dr.getInt(1),
+                    dr.getString(2));
+        }).find(id);
     }
 
     //Tickets and Receipt list
@@ -241,7 +248,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
     public CustomerInfoExt loadCustomerExt(String id) throws BasicException {
         return (CustomerInfoExt) new PreparedSentence(s, "SELECT ID, DOC, DOCTYPE, SEARCHKEY, NAME, CARD, TAXCATEGORY, NOTES, MAXDEBT, VISIBLE, CURDATE, CURDEBT"
                 + ", FIRSTNAME, LASTNAME, EMAIL, PHONE, PHONE2, FAX"
-                + ", ADDRESS, ADDRESS2, POSTAL, CITY, REGION, COUNTRY"
+                + ", ADDRESS, ADDRESS2, POSTAL, CITY, REGION, COUNTRY, SITUATION "
                 + " FROM CUSTOMERS WHERE ID = ?", SerializerWriteString.INSTANCE, new CustomerExtRead()).find(id);
     }
 
@@ -318,15 +325,16 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
 
                 // new ticket
-                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, NUMBER, PERSON, CUSTOMER,SELLER) VALUES (?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
+                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, POINTSALE, NUMBER, PERSON, CUSTOMER, SELLER) VALUES (?, ?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
                     @Override
                     public void writeValues() throws BasicException {
                         setString(1, ticket.getId());
                         setInt(2, ticket.getTicketType().getId());
-                        setInt(3, ticket.getNumber());
-                        setString(4, ticket.getUser().getId());
-                        setString(5, ticket.getCustomerId());
-                        setString(6, ticket.getVendedor().getId());
+                        setInt(3, ticket.getPointSale());
+                        setInt(4, ticket.getNumber());
+                        setString(5, ticket.getUser().getId());
+                        setString(6, ticket.getCustomerId());
+                        setString(7, ticket.getSeller().getId());
                     }
                 });
 
@@ -628,6 +636,31 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 "LOCATIONS", new String[]{"ID", "NAME", "ADDRESS"}, new String[]{"ID", AppLocal.getIntString("label.locationname"), AppLocal.getIntString("label.locationaddress")}, new Datas[]{Datas.STRING, Datas.STRING, Datas.STRING}, new Formats[]{Formats.STRING, Formats.STRING, Formats.STRING}, new int[]{0});
     }
 
+    public TicketTypeInfo getTicketType(int type, int pointSale, int taxSituation) throws BasicException {
+        String query = " SELECT TT.ID, TT.NAME "
+                + "FROM TICKETSETTING TS "
+                + "INNER JOIN TICKETTYPE TT ON TS.TICKETTYPE = TT.ID "
+                + "WHERE TS.TYPE = ? AND TS.CUSTOMER_SITUATION = ? AND TS.POINTSALE = ? ";
+
+        return (TicketTypeInfo) new PreparedSentence(s, query, SerializerWriteParams.INSTANCE, new SerializerRead() {
+            @Override
+            public Object readValues(DataRead dr) throws BasicException {
+                TicketTypeInfo ticketTypeInfo = new TicketTypeInfo(dr.getInt(1), dr.getString(2));
+                return ticketTypeInfo;
+            }
+
+        }).find(new DataParams() {
+            @Override
+            public void writeValues() throws BasicException {
+                setInt(1, type);
+                setInt(2, taxSituation);
+                setInt(3, pointSale);
+
+            }
+        });
+
+    }
+
     protected static class CustomerExtRead implements SerializerRead {
 
         @Override
@@ -656,7 +689,7 @@ public class DataLogicSales extends BeanFactoryDataSingle {
             c.setCity(dr.getString(22));
             c.setRegion(dr.getString(23));
             c.setCountry(dr.getString(24));
-
+            c.setTaxSituation(dr.getInt(25));
             return c;
         }
     }

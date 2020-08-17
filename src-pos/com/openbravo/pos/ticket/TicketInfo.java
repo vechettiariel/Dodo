@@ -43,7 +43,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
 
     private static final DateFormat m_dateformat = new SimpleDateFormat("hh:mm");
     private String m_sId;
-    private TicketType tickettype;
+    private TicketTypeInfo tickettype;
 
     private int m_Number;
     private int m_PointSale;
@@ -56,7 +56,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
     private List<TicketLineInfo> m_aLines;
     private List<PaymentInfo> payments;
     private List<TicketTaxInfo> taxes;
-    private UserInfo m_Vendedor;
+    private UserInfo m_Seller;
 
     /**
      * Creates new TicketModel
@@ -73,7 +73,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
         m_aLines = new ArrayList<>(); // vacio de lineas
         payments = new ArrayList<>();
         taxes = null;
-        m_Vendedor = null;
+        m_Seller = null;
 
     }
 
@@ -87,21 +87,24 @@ public class TicketInfo implements SerializableRead, Externalizable {
         out.writeObject(m_dDate);
         out.writeObject(attributes);
         out.writeObject(m_aLines);
-        out.writeObject(m_Vendedor);
+        out.writeObject(m_Seller);
+        out.writeInt(m_PointSale);
     }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         // esto es solo para serializar tickets que no estan en la bolsa de tickets pendientes
         m_sId = (String) in.readObject();
-        tickettype = (TicketType) in.readObject();
+        tickettype = (TicketTypeInfo) in.readObject();
         m_Number = in.readInt();
         m_Customer = (CustomerInfoExt) in.readObject();
         m_dDate = (Date) in.readObject();
         attributes = (Properties) in.readObject();
         m_aLines = (List<TicketLineInfo>) in.readObject();
         m_User = null;
-        m_Vendedor = (UserInfo) in.readObject();
+        m_Seller = (UserInfo) in.readObject();
+        m_PointSale = in.readInt();
+
         m_sActiveCash = null;
 
         payments = new ArrayList<>();
@@ -112,7 +115,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
     @Override
     public void readValues(DataRead dr) throws BasicException {
         m_sId = dr.getString(1);
-        tickettype = new TicketType(dr.getInt(2));
+        tickettype = new TicketTypeInfo(dr.getInt(2));
         m_Number = dr.getInt(3);
         m_dDate = dr.getTimestamp(4);
         m_sActiveCash = dr.getString(5);
@@ -125,7 +128,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
         }
         m_User = new UserInfo(dr.getString(7), dr.getString(8));
         m_Customer = new CustomerInfoExt(dr.getString(9));
-        m_Vendedor = new UserInfo(dr.getString(10), dr.getString(11));
+        m_Seller = new UserInfo(dr.getString(10), dr.getString(11));
         m_aLines = new ArrayList<>();
 
         payments = new ArrayList<>();
@@ -153,7 +156,7 @@ public class TicketInfo implements SerializableRead, Externalizable {
         payments.forEach((p) -> {
             t.payments.add(p.copyPayment());
         });
-        t.m_Vendedor = m_Vendedor;
+        t.m_Seller = m_Seller;
 
         // taxes are not copied, must be calculated again.
         return t;
@@ -163,11 +166,11 @@ public class TicketInfo implements SerializableRead, Externalizable {
         return m_sId;
     }
 
-    public TicketType getTicketType() {
+    public TicketTypeInfo getTicketType() {
         return tickettype;
     }
 
-    public void setTicketType(TicketType tickettype) {
+    public void setTicketType(TicketTypeInfo tickettype) {
         this.tickettype = tickettype;
     }
 
@@ -229,12 +232,12 @@ public class TicketInfo implements SerializableRead, Externalizable {
         m_User = value;
     }
 
-    public UserInfo getVendedor() {
-        return m_Vendedor;
+    public UserInfo getSeller() {
+        return m_Seller;
     }
 
-    public void setVendedor(UserInfo m_Vendedor) {
-        this.m_Vendedor = m_Vendedor;
+    public void setSeller(UserInfo m_Seller) {
+        this.m_Seller = m_Seller;
     }
 
     public CustomerInfoExt getCustomer() {

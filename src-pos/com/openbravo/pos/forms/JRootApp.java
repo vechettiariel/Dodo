@@ -19,7 +19,6 @@
 package com.openbravo.pos.forms;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.event.*;
 import java.lang.reflect.Constructor;
 import java.util.Date;
@@ -47,8 +46,6 @@ import com.openbravo.pos.validation.InvoiceValidation;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
 /**
@@ -76,7 +73,7 @@ public class JRootApp extends JPanel implements AppView {
     private DeviceTicket m_TP;
     private TicketParser m_TTP;
 
-    private Map<String, BeanFactory> m_aBeanFactories;
+    private final Map<String, BeanFactory> m_aBeanFactories;
 
     private JPrincipalApp m_principalapp = null;
 
@@ -92,7 +89,7 @@ public class JRootApp extends JPanel implements AppView {
      */
     public JRootApp() {
 
-        m_aBeanFactories = new HashMap<String, BeanFactory>();
+        m_aBeanFactories = new HashMap<>();
 
         // Inicializo los componentes visuales
         initComponents();
@@ -471,6 +468,13 @@ public class JRootApp extends JPanel implements AppView {
     @Override
     public IInvoiceValidation getInvoiceValidacion() {
         return invoiceValidation;
+    }
+
+    @Override
+    public int getTypePerson() {
+        int type = 0;
+        type = Integer.valueOf(m_props.getProperty("fiscal.typeresp", "0"));
+        return type;
     }
 
     // La accion del selector

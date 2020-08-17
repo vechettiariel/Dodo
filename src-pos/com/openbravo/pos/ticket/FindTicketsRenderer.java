@@ -31,8 +31,8 @@ import javax.swing.JList;
  */
 public class FindTicketsRenderer extends DefaultListCellRenderer {
     
-    private Icon icoTicketNormal;
-    private Icon icoTicketRefund;
+    private final Icon icoTicketNormal;
+    private final Icon icoTicketRefund;
 
     public static final int RECEIPT_NORMAL = 0;
     

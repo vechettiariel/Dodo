@@ -120,15 +120,15 @@ public class InventoryLine {
         if (m_dMultiply == 1.0) {
             return "";
         } else {
-            return Formats.CURRENCY.formatValue(new Double(getPrice()));
+            return Formats.CURRENCY.formatValue(getPrice());
         }
     }
     
     public String printMultiply() {
-        return Formats.DOUBLE.formatValue(new Double(m_dMultiply));
+        return Formats.DOUBLE.formatValue(m_dMultiply);
     }
     
     public String printSubValue() {
-        return Formats.CURRENCY.formatValue(new Double(getSubValue()));
+        return Formats.CURRENCY.formatValue(getSubValue());
     }    
 }

@@ -40,12 +40,17 @@ public class JPanelTicketSales extends JPanelTicket {
      * Creates a new instance of JPanelTicketSales
      */
     public JPanelTicketSales() {
+    
+    
+    
     }
 
     @Override
     public void init(AppView app) {
         super.init(app);
         m_ticketlines.addListSelectionListener(new CatalogSelectionListener());
+
+        m_type = JPanelTicket.NORMAL;
     }
 
     @Override

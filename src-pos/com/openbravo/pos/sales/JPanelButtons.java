@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.sales;
 
 import com.openbravo.data.loader.LocalRes;
@@ -44,34 +43,38 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class JPanelButtons extends javax.swing.JPanel {
 
-    private static Logger logger = Logger.getLogger("com.openbravo.pos.sales.JPanelButtons");
+    private static final Logger logger = Logger.getLogger("com.openbravo.pos.sales.JPanelButtons");
 
     private static SAXParser m_sp = null;
-    
+
     private Properties props;
     private Map<String, String> events;
-    
+
     private ThumbNailBuilder tnbmacro;
-    
+
     private JPanelTicket panelticket;
-    
-    /** Creates new form JPanelButtons */
+
+    /**
+     * Creates new form JPanelButtons
+     *
+     * @param sConfigKey
+     * @param panelticket
+     */
     public JPanelButtons(String sConfigKey, JPanelTicket panelticket) {
         initComponents();
-        
+
         // Load categories default thumbnail
         tnbmacro = new ThumbNailBuilder(16, 16, "com/openbravo/images/greenled.png");
-        
+
         this.panelticket = panelticket;
-        
+
         props = new Properties();
-        events = new HashMap<String, String>();
-        
+        events = new HashMap<>();
+
         String sConfigRes = panelticket.getResourceAsXML(sConfigKey);
-        
+
         if (sConfigRes != null) {
             try {
                 if (m_sp == null) {
@@ -87,10 +90,10 @@ public class JPanelButtons extends javax.swing.JPanel {
             } catch (IOException eIO) {
                 logger.log(Level.WARNING, LocalRes.getIntString("exception.iofile"), eIO);
             }
-        }     
-    
+        }
+
     }
-    
+
     public void setPermissions(AppUser user) {
         for (Component c : this.getComponents()) {
             String sKey = c.getName();
@@ -101,102 +104,117 @@ public class JPanelButtons extends javax.swing.JPanel {
             }
         }
     }
-    
+
     public String getProperty(String key) {
         return props.getProperty(key);
     }
-    
-     public String getProperty(String key, String defaultvalue) {
+
+    public String getProperty(String key, String defaultvalue) {
         return props.getProperty(key, defaultvalue);
     }
-     
+
     public String getEvent(String key) {
         return events.get(key);
     }
-    
-    private class ConfigurationHandler extends DefaultHandler {       
+
+    private class ConfigurationHandler extends DefaultHandler {
+
         @Override
-        public void startDocument() throws SAXException {}
+        public void startDocument() throws SAXException {
+        }
+
         @Override
-        public void endDocument() throws SAXException {}    
+        public void endDocument() throws SAXException {
+        }
+
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
-            if ("button".equals(qName)){
-                
-                
-                // The button title text
-                String titlekey = attributes.getValue("titlekey");
-                if (titlekey == null) {
-                    titlekey = attributes.getValue("name");
-                }
-                String title = titlekey == null
-                        ? attributes.getValue("title")
-                        : AppLocal.getIntString(titlekey);
-                
-                // adding the button to the panel
-                JButton btn = new JButtonFunc(attributes.getValue("key"), 
-                        attributes.getValue("image"), 
-                        title);
-                
-                 // The template resource or the code resource
-                final String template = attributes.getValue("template");
-                if (template == null) {
-                    final String code = attributes.getValue("code");
-                    btn.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            panelticket.evalScriptAndRefresh(code);
-                        }
-                    });
-                } else {
-                    btn.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent evt) {
-                            panelticket.printTicket(template);
-                        }
-                    });     
-                }
-                add(btn);
-                
-            } else if ("event".equals(qName)) {
-                events.put(attributes.getValue("key"), attributes.getValue("code"));
-            } else {
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            if (null == qName) {
                 String value = attributes.getValue("value");
-                if (value != null) {                  
+                if (value != null) {
                     props.setProperty(qName, attributes.getValue("value"));
                 }
+            } else {
+                switch (qName) {
+                    case "button" -> {
+                        // The button title text
+                        String titlekey = attributes.getValue("titlekey");
+                        if (titlekey == null) {
+                            titlekey = attributes.getValue("name");
+                        }
+                        String title = titlekey == null
+                                ? attributes.getValue("title")
+                                : AppLocal.getIntString(titlekey);
+                        // adding the button to the panel
+                        JButton btn = new JButtonFunc(attributes.getValue("key"),
+                                attributes.getValue("image"),
+                                title);
+                        // The template resource or the code resource
+                        final String template = attributes.getValue("template");
+                        if (template == null) {
+                            final String code = attributes.getValue("code");
+                            btn.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent evt) {
+                                    panelticket.evalScriptAndRefresh(code);
+                                }
+                            });
+                        } else {
+                            btn.addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent evt) {
+                                    panelticket.printTicket(template);
+                                }
+                            });
+                        }
+                        add(btn);
+                    }
+                    case "event" ->
+                        events.put(attributes.getValue("key"), attributes.getValue("code"));
+                    default -> {
+                        String value = attributes.getValue("value");
+                        if (value != null) {
+                            props.setProperty(qName, attributes.getValue("value"));
+                        }
+                    }
+                }
             }
-        }      
+        }
+
         @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {}
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+        }
+
         @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {}
-    }  
-        
+        public void characters(char[] ch, int start, int length) throws SAXException {
+        }
+    }
+
     private class JButtonFunc extends JButton {
-       
+
         public JButtonFunc(String sKey, String sImage, String title) {
-            
+
             setName(sKey);
             setText(title);
             setIcon(new ImageIcon(tnbmacro.getThumbNail(panelticket.getResourceAsImage(sImage))));
             setFocusPainted(false);
             setFocusable(false);
             setRequestFocusEnabled(false);
-            setMargin(new Insets(8, 14, 8, 14));  
-        }         
+            setMargin(new Insets(8, 14, 8, 14));
+        }
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
 
     }// </editor-fold>//GEN-END:initComponents
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    
 }

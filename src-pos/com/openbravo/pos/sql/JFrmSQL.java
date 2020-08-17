@@ -77,19 +77,27 @@ public class JFrmSQL extends javax.swing.JFrame implements AppView {
         return null;
     }
 
+    @Override
+    public int getTypePerson() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private class MyFrameListener extends WindowAdapter {
 
+        @Override
         public void windowClosing(WindowEvent evt) {
             sql.deactivate();
             session.close();
             dispose();
         }
 
+        @Override
         public void windowClosed(WindowEvent evt) {
             System.exit(0);
         }
     }
 
+    @Override
     public DeviceScale getDeviceScale() {
         return null;
     }

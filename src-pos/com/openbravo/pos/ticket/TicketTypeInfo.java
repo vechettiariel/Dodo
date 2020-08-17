@@ -6,20 +6,13 @@
 package com.openbravo.pos.ticket;
 
 import com.openbravo.data.loader.IKeyed;
+import java.io.Serializable;
 
 /**
  *
  * @author ariel
  */
-public class TicketType implements IKeyed {
-
-    public static TicketType getNomalTypeTicket(Object object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public static TicketType getPaymentTypeTicket() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class TicketTypeInfo implements IKeyed, Serializable {
 
     /*
     001	FACTURAS A
@@ -37,6 +30,7 @@ public class TicketType implements IKeyed {
     013	NOTAS DE CREDITO C
     015	RECIBOS C
     016	NOTAS DE VENTA AL CONTADO C
+    1000    RECIBO DE COBRO
      */
  /*
     Desde 1 al 999 de uso para comprontes de Afip
@@ -44,16 +38,16 @@ public class TicketType implements IKeyed {
     private int m_id;
     private String m_nanme;
 
-    public TicketType(int m_id) {
+    public TicketTypeInfo(int m_id) {
         this.m_id = m_id;
     }
 
-    public TicketType(int m_id, String m_nanme) {
+    public TicketTypeInfo(int m_id, String m_nanme) {
         this.m_id = m_id;
         this.m_nanme = m_nanme;
     }
 
-    public TicketType() {
+    public TicketTypeInfo() {
     }
 
     public int getId() {
@@ -80,14 +74,6 @@ public class TicketType implements IKeyed {
     @Override
     public String toString() {
         return m_nanme;
-    }
-
-    public boolean isRefund() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public boolean isNormal() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -46,6 +46,10 @@ public class CustomersPanel extends JPanelTable {
     public CustomersPanel() {
     }
 
+    /**
+     *
+     */
+    @Override
     protected void init() {
         DataLogicCustomers dlCustomers = (DataLogicCustomers) app.getBean("com.openbravo.pos.customers.DataLogicCustomers");
         tcustomers = dlCustomers.getTableCustomers();

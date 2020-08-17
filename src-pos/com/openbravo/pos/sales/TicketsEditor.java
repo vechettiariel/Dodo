@@ -16,13 +16,19 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.pos.sales;
 
 import com.openbravo.pos.ticket.TicketInfo;
 
 public interface TicketsEditor {
-    
+
+    /**
+     *
+     * @param oTicket
+     * @param oTicketExt
+     */
     public void setActiveTicket(TicketInfo oTicket, Object oTicketExt); // el ticket mas informacion extra...
-    public TicketInfo getActiveTicket(); 
+
+    public TicketInfo getActiveTicket();
+
 }

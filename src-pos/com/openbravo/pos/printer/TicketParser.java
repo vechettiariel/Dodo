@@ -266,6 +266,7 @@ public class TicketParser extends DefaultHandler {
             case OUTPUT_NONE -> {
                 if ("play".equals(qName)) {
                     try {
+                        @SuppressWarnings("deprecation")
                         AudioClip oAudio = Applet.newAudioClip(getClass().getClassLoader().getResource(text.toString()));
                         oAudio.play();
                     } catch (Exception fnfe) {

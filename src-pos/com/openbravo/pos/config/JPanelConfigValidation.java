@@ -8,10 +8,11 @@ package com.openbravo.pos.config;
 import com.openbravo.data.gui.ComboBoxValModel;
 import com.openbravo.data.user.DirtyManager;
 import com.openbravo.pos.forms.AppConfig;
-import com.openbravo.pos.types.GeneralTypes;
+import com.openbravo.pos.types.ImposingSituationInfo;
 import com.openbravo.pos.util.AltEncrypter;
 import com.openbravo.pos.util.FileChooserCert;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,9 @@ public class JPanelConfigValidation extends javax.swing.JPanel implements PanelC
     public JPanelConfigValidation() {
         initComponents();
 
-        List a = GeneralTypes.getTypesResponsible();
+        //List a = GeneralTypes.getTypesResponsible();
+        List a = new ArrayList<ImposingSituationInfo>();
+
         m_CategoryModel = new ComboBoxValModel(a);
         m_jCategory.setModel(m_CategoryModel);
 
@@ -290,7 +293,7 @@ public class JPanelConfigValidation extends javax.swing.JPanel implements PanelC
 
         config.setProperty("fiscal.codnumber", m_cuit.getText());
         config.setProperty("fiscal.typeresp", (String) m_CategoryModel.getSelectedKey());
-        config.setProperty("iscal.pointsale", m_puntoventa.getText());
+        config.setProperty("fiscal.pointsale", m_puntoventa.getText());
 
         config.setProperty("fiscal.validation", comboValue(m_cboSalidaFiscal.getSelectedItem()));
 

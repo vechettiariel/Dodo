@@ -45,11 +45,12 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
     private Object m_oId;
 
     //private final SentenceList m_sentcat;
-    private ComboBoxValModel m_CategoryModel;
-
+    //private final ComboBoxValModel m_CategoryModel;
     private final DirtyManager m_Dirty;
     private ComboBoxValModel m_DocTypeModel;
     private final AppView app;
+    private ComboBoxValModel m_SituationModel;
+    private final DataLogicCustomers dlCustomers;
 
     /**
      * Creates new form CustomersView
@@ -61,16 +62,17 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
 
         this.app = app;
 
-//        DataLogicSales dlSales = (DataLogicSales) app.getBean("com.openbravo.pos.sales.DataLogicSales");
+        dlCustomers = (DataLogicCustomers) app.getBean("com.openbravo.pos.customers.DataLogicCustomers");
         initComponents();
 
-        m_CategoryModel = new ComboBoxValModel();
-
+        //       m_CategoryModel = new ComboBoxValModel();
+        
+        m_SituationModel = new ComboBoxValModel();
         m_Dirty = dirty;
         m_jTaxID.getDocument().addDocumentListener(dirty);
         m_jSearchkey.getDocument().addDocumentListener(dirty);
         m_jName.getDocument().addDocumentListener(dirty);
-        m_jCategory.addActionListener(dirty);
+        m_jSituation.addActionListener(dirty);
         m_jNotes.getDocument().addDocumentListener(dirty);
         txtMaxdebt.getDocument().addDocumentListener(dirty);
         m_jVisible.addActionListener(dirty);
@@ -94,9 +96,9 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
 
     public void activate() throws BasicException {
 
-        List a = GeneralTypes.getTypesResponsible();
-        m_CategoryModel = new ComboBoxValModel(a);
-        m_jCategory.setModel(m_CategoryModel);
+        List situationList = dlCustomers.getSituationList();
+        m_SituationModel = new ComboBoxValModel(situationList);
+        m_jSituation.setModel(m_SituationModel);
 
         List docTypeList = GeneralTypes.getListDocType();
         m_DocTypeModel = new ComboBoxValModel(docTypeList);
@@ -113,7 +115,9 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         m_jTaxID.setText(null);
         m_jSearchkey.setText(null);
         m_jName.setText(null);
-        m_CategoryModel.setSelectedKey(null);
+        //m_CategoryModel.setSelectedKey(null);
+        m_SituationModel.setSelectedKey(null);
+
         m_jNotes.setText(null);
         txtMaxdebt.setText(null);
         txtCurdebt.setText(null);
@@ -138,7 +142,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         m_jTaxID.setEnabled(false);
         m_jSearchkey.setEnabled(false);
         m_jName.setEnabled(false);
-        m_jCategory.setEnabled(false);
+        m_jSituation.setEnabled(false);
         m_jNotes.setEnabled(false);
         txtMaxdebt.setEnabled(false);
         txtCurdebt.setEnabled(false);
@@ -178,7 +182,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         m_jTaxID.setEnabled(true);
         m_jSearchkey.setEnabled(true);
         m_jName.setEnabled(true);
-        m_jCategory.setEnabled(true);
+        m_jSituation.setEnabled(true);
         m_jNotes.setEnabled(true);
         txtMaxdebt.setEnabled(true);
         txtCurdebt.setEnabled(true);
@@ -234,7 +238,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtRegion.setText(Formats.STRING.formatValue(customer[21]));
         txtCountry.setText(Formats.STRING.formatValue(customer[22]));
 
-        m_CategoryModel.setSelectedKey(customer[23]);
+        // m_CategoryModel.setSelectedKey(customer[23]);
+        m_SituationModel.setSelectedKey(customer[24]);
 
         m_jTaxID.setEnabled(false);
         m_DocType.setEnabled(false);
@@ -261,7 +266,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtRegion.setEnabled(false);
         txtCountry.setEnabled(false);
 
-        m_jCategory.setEnabled(false);
+        m_jSituation.setEnabled(false);
 
         jButton2.setEnabled(false);
         jButton3.setEnabled(false);
@@ -296,7 +301,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtRegion.setText(Formats.STRING.formatValue(customer[21]));
         txtCountry.setText(Formats.STRING.formatValue(customer[22]));
 
-        m_CategoryModel.setSelectedKey(customer[23]);
+        //m_CategoryModel.setSelectedKey(customer[23]);
+        m_SituationModel.setSelectedKey(customer[24]);
 
         m_jTaxID.setEnabled(true);
         m_DocType.setEnabled(true);
@@ -323,7 +329,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtRegion.setEnabled(true);
         txtCountry.setEnabled(true);
 
-        m_jCategory.setEnabled(true);
+        m_jSituation.setEnabled(true);
 
         jButton2.setEnabled(true);
         jButton3.setEnabled(true);
@@ -331,7 +337,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
 
     @Override
     public Object createValue() throws BasicException {
-        Object[] customer = new Object[24];
+        Object[] customer = new Object[25];
         customer[0] = m_oId == null ? UUID.randomUUID().toString() : m_oId;
         customer[1] = m_jTaxID.getText();
         customer[2] = m_DocTypeModel.getSelectedKey();
@@ -356,7 +362,8 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         customer[21] = Formats.STRING.parseValue(txtRegion.getText());
         customer[22] = Formats.STRING.parseValue(txtCountry.getText());
 
-        customer[23] = m_CategoryModel.getSelectedKey();
+        //customer[23] = m_CategoryModel.getSelectedKey();
+        customer[24] = m_SituationModel.getSelectedKey();
 
         return customer;
     }
@@ -382,7 +389,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
         txtCurdate = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        m_jCategory = new javax.swing.JComboBox();
+        m_jSituation = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -515,7 +522,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(12, 12, 12)
-                                        .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(m_jSituation, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -577,7 +584,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(m_jCategory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(m_jSituation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -807,7 +814,7 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
 
                         m_jSearchkey.setText(null);
                         m_jName.setText(null);
-                        m_CategoryModel.setSelectedKey(null);
+                        //              m_CategoryModel.setSelectedKey(null);
                         m_jNotes.setText(null);
                         txtMaxdebt.setText(null);
                         txtCurdebt.setText(null);
@@ -896,10 +903,10 @@ public final class CustomersView extends javax.swing.JPanel implements EditorRec
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jcard;
     private javax.swing.JComboBox<String> m_DocType;
-    private javax.swing.JComboBox m_jCategory;
     private javax.swing.JTextField m_jName;
     private javax.swing.JTextArea m_jNotes;
     private javax.swing.JTextField m_jSearchkey;
+    private javax.swing.JComboBox m_jSituation;
     private javax.swing.JTextField m_jTaxID;
     private javax.swing.JCheckBox m_jVisible;
     private javax.swing.JTextField txtAddress;

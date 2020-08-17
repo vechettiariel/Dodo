@@ -127,7 +127,9 @@ public class JCustomerFinder extends javax.swing.JDialog implements EditorCreato
 
     public void executeSearch() {
         try {
-            jListCustomers.setModel(new MyListData(lpr.loadData()));
+            MyListData list = new MyListData(lpr.loadData());
+            
+            jListCustomers.setModel(list);
             if (jListCustomers.getModel().getSize() > 0) {
                 jListCustomers.setSelectedIndex(0);
             }

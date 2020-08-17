@@ -21,7 +21,7 @@ package com.openbravo.pos.sales;
 import com.openbravo.basic.BasicException;
 import com.openbravo.data.gui.JMessageDialog;
 import com.openbravo.data.gui.MessageInf;
-import com.openbravo.pos.customers.CustomerInfoExt;
+
 import com.openbravo.pos.customers.DataLogicCustomers;
 import com.openbravo.pos.forms.AppLocal;
 import com.openbravo.pos.forms.AppView;
@@ -34,7 +34,7 @@ import com.openbravo.pos.scripting.ScriptFactory;
 import com.openbravo.pos.ticket.FindTicketsInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
-import com.openbravo.pos.ticket.TicketType;
+import com.openbravo.pos.ticket.TicketTypeInfo;
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -189,12 +189,12 @@ public class JTicketsBagTicket extends JTicketsBag {
         try {
             m_jEdit.setEnabled(
                     m_ticket != null
-                    && (m_ticket.getTicketType().isNormal() || m_ticket.getTicketType().isRefund())
+                    && (m_panelticketedit.isNormal() || m_panelticketedit.isRefund())
                     && m_dlSales.isCashActive(m_ticket.getActiveCash()));
         } catch (BasicException e) {
             m_jEdit.setEnabled(false);
         }
-        m_jRefund.setEnabled(m_ticket != null && m_ticket.getTicketType().isNormal());
+        m_jRefund.setEnabled(m_panelticketedit.isRefund());
         m_jPrint.setEnabled(m_ticket != null);
 
         // Este deviceticket solo tiene una impresora, la de pantalla
@@ -420,10 +420,7 @@ public class JTicketsBagTicket extends JTicketsBag {
 
         TicketInfo refundticket = new TicketInfo();
 
-        
-        refundticket.setTicketType(TicketType.getNomalTypeTicket(null));
-        
-        
+        // refundticket.setTicketType(TicketTypeInfo.getNomalTypeTicket(null));
         refundticket.setCustomer(m_ticket.getCustomer());
         refundticket.setPayments(m_ticket.getPayments());
         m_panelticketedit.setActiveTicket(refundticket, null);

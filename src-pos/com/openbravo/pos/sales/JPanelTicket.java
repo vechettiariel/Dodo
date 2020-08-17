@@ -48,6 +48,7 @@ import com.openbravo.pos.ticket.ProductInfoExt;
 import com.openbravo.pos.taxes.TaxInfo;
 import com.openbravo.pos.ticket.TicketInfo;
 import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.ticket.TicketTypeInfo;
 import com.openbravo.pos.util.JRPrinterAWT300;
 import com.openbravo.pos.util.ReportUtils;
 import java.awt.BorderLayout;
@@ -94,6 +95,12 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     private final static int NUMBER_PORZERODEC = 5;
     private final static int NUMBER_PORINT = 6;
     private final static int NUMBER_PORDEC = 7;
+
+    protected static final int NORMAL = 1;
+    protected static final int REFUND = 2;
+
+    protected int m_type;
+
     protected JTicketLines m_ticketlines;
     // private Template m_tempLine;
     private TicketParser m_TTP;
@@ -133,6 +140,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
     public void init(AppView app) throws BeanFactoryException {
 
         m_App = app;
+
         dlSystem = (DataLogicSystem) m_App.getBean("com.openbravo.pos.forms.DataLogicSystem");
         dlSales = (DataLogicSales) m_App.getBean("com.openbravo.pos.sales.DataLogicSales");
         dlCustomers = (DataLogicCustomers) m_App.getBean("com.openbravo.pos.customers.DataLogicCustomers");
@@ -170,6 +178,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         // inicializamos
         m_oTicket = null;
         m_oTicketExt = null;
+
     }
 
     @Override
@@ -248,17 +257,29 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         m_oTicket = oTicket;
         m_oTicketExt = oTicketExt;
+        try {
 
-        if (m_oTicket != null) {
-            // Asign preeliminary properties to the receipt
-            m_oTicket.setUser(m_App.getAppUserView().getUser().getUserInfo());
-            m_oTicket.setActiveCash(m_App.getActiveCashIndex());
-            m_oTicket.setDate(new Date()); // Set the edition date.
+            if (m_oTicket != null) {
+
+                // Asign preeliminary properties to the receipt
+                m_oTicket.setUser(m_App.getAppUserView().getUser().getUserInfo());
+                m_oTicket.setActiveCash(m_App.getActiveCashIndex());
+                m_oTicket.setDate(new Date()); // Set the edition date.
+
+                //Load customer Defaul
+                m_oTicket.setCustomer(dlSales.loadCustomerExt("0"));
+
+                calculeTicketType();
+
+                calculeLastTicketNum();
+            }
+            executeEvent(m_oTicket, m_oTicketExt, "ticket.show");
+
+            refreshTicket();
+        } catch (BasicException ex) {
+            new MessageInf(MessageInf.SGN_WARNING, "Active Ticket", ex).show(this);
+
         }
-
-        executeEvent(m_oTicket, m_oTicketExt, "ticket.show");
-
-        refreshTicket();
     }
 
     @Override
@@ -285,7 +306,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             resetSouthComponent();
 
         } else {
-            if (m_oTicket.getTicketType() != null && m_oTicket.getTicketType().isRefund()) {
+            if (m_oTicket.getTicketType() != null && this.isRefund()) {
                 //Make disable Search and Edit Buttons
                 m_jEditLine.setVisible(false);
                 m_jList.setVisible(false);
@@ -723,7 +744,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
                     //If it's a refund + button means one unit less
-                    if (m_oTicket.getTicketType().isRefund()) {
+                    if (isRefund()) {
                         newline.setMultiply(newline.getMultiply() - 1.0);
                         paintTicketLine(i, newline);
                     } else {
@@ -744,7 +765,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
                     //If it's a refund - button means one unit more
-                    if (m_oTicket.getTicketType().isRefund()) {
+                    if (isRefund()) {
                         newline.setMultiply(newline.getMultiply() + 1.0);
                         if (newline.getMultiply() >= 0) {
                             removeTicketLine(i);
@@ -771,7 +792,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType().isRefund()) {
+                    if (isRefund()) {
                         newline.setMultiply(-dPor);
                         newline.setPrice(Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -793,7 +814,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 } else {
                     double dPor = getPorValue();
                     TicketLineInfo newline = new TicketLineInfo(m_oTicket.getLine(i));
-                    if (m_oTicket.getTicketType().isNormal()) {
+                    if (isNormal()) {
                         newline.setMultiply(dPor);
                         newline.setPrice(-Math.abs(newline.getPrice()));
                         paintTicketLine(i, newline);
@@ -870,7 +891,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 ticket.setUser(m_App.getAppUserView().getUser().getUserInfo()); // El usuario que lo cobra
                 ticket.setActiveCash(m_App.getActiveCashIndex());
                 ticket.setDate(new Date()); // Le pongo la fecha de cobro
-                ticket.setVendedor(m_ticketsbag.getVendedor());
+                ticket.setSeller(m_ticketsbag.getVendedor());
 
                 if (executeEvent(ticket, ticketext, "ticket.total") == null) {
 
@@ -880,16 +901,8 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     if (executeEvent(ticket, ticketext, "ticket.save") == null) {
                         // Save the receipt and assign a receipt number
 
-                        try {
-                            dlSales.saveTicket(ticket, m_App.getInventoryLocation());
-
-                        } catch (BasicException eData) {
-                            MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
-                            msg.show(this);
-                        }
-
                         // Select the Payments information
-                        JPaymentSelect paymentdialog = ticket.getTicketType().isNormal()
+                        JPaymentSelect paymentdialog = isNormal()
                                 ? paymentdialogreceipt
                                 : paymentdialogrefund;
                         paymentdialog.setPrintSelected("true".equals(m_jbtnconfig.getProperty("printselected", "true")));
@@ -901,16 +914,24 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             // assign the payments selected and calculate taxes.
                             ticket.setPayments(paymentdialog.getSelectedPayments());
 
+                            dlSales.saveTicket(ticket, m_App.getInventoryLocation());
+
                             executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
 
                             // Print receipt.
                             printTicket(paymentdialog.isPrintSelected()
                                     ? "Printer.Ticket"
                                     : "Printer.Ticket2", ticket, ticketext);
-                            resultok = true;
+
+                            resultok = false;
                         }
+
                     }
                 }
+
+            } catch (BasicException eData) {
+                MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
+                msg.show(this);
             } catch (TaxesException e) {
                 MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotcalculatetaxes"));
                 msg.show(this);
@@ -920,11 +941,11 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
             // reset the payment info
             m_oTicket.resetTaxes();
             m_oTicket.resetPayments();
-        }
 
-        // cancelled the ticket.total script
-        // or canceled the payment dialog
-        // or canceled the ticket.close script
+            // cancelled the ticket.total script
+            // or canceled the payment dialog
+            // or canceled the ticket.close script
+        }
         return resultok;
     }
 
@@ -1079,6 +1100,33 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         } else if (m_oTicket.getLinesCount() > 0) {
             m_ticketlines.setSelectedIndex(m_oTicket.getLinesCount() - 1);
         }
+    }
+
+    private void calculeTicketType() throws BasicException {
+
+        TicketTypeInfo ticketTypeInfo = null;
+
+        if (m_oTicket != null) {
+            ticketTypeInfo = dlSales.getTicketType(m_type, m_oTicket.getPointSale(), m_oTicket.getCustomer().getTaxSituation());
+        }
+
+        if (ticketTypeInfo != null) {
+            m_oTicket.setTicketType(ticketTypeInfo);
+        } else {
+            throw new BasicException("I can't determine the type of ticket");
+        }
+    }
+
+    private void calculeLastTicketNum() throws BasicException {
+        m_oTicket.setNumber(dlSales.findNextTicketNumber(m_oTicket.getTicketType().getId(), m_oTicket.getPointSale()));
+    }
+
+    public boolean isRefund() {
+        return m_type == REFUND;
+    }
+
+    public boolean isNormal() {
+        return m_type == NORMAL;
     }
 
 //  private void obtenerValidacionAfip(TicketInfo ticket) throws WsFev1Execepcion, WsaaException, RemoteException {
@@ -1751,8 +1799,9 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
 
         try {
             m_oTicket.setCustomer(finder.getSelectedCustomer() == null
-                    ? null
+                    ? dlSales.loadCustomerExt("0")
                     : dlSales.loadCustomerExt(finder.getSelectedCustomer().getId()));
+
         } catch (BasicException e) {
             MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotfindcustomer"), e);
             msg.show(this);

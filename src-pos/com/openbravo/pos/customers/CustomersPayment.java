@@ -39,7 +39,7 @@ import com.openbravo.pos.scripting.ScriptEngine;
 import com.openbravo.pos.scripting.ScriptException;
 import com.openbravo.pos.scripting.ScriptFactory;
 import com.openbravo.pos.ticket.TicketInfo;
-import com.openbravo.pos.ticket.TicketType;
+import com.openbravo.pos.ticket.TicketTypeInfo;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComponent;
@@ -504,7 +504,8 @@ public class CustomersPayment extends javax.swing.JPanel implements JPanelView, 
 
             // Save the ticket
             TicketInfo ticket = new TicketInfo();
-            ticket.setTicketType(TicketType.getPaymentTypeTicket());
+            
+            ticket.setTicketType(null);
 
             List<PaymentInfo> payments = paymentdialog.getSelectedPayments();
 
