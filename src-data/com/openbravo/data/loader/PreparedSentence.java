@@ -142,7 +142,6 @@ public class PreparedSentence extends JDBCSentence {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public DataResultSet openExec(Object params) throws BasicException {
         // true -> un resultset
         // false -> un updatecount (si -1 entonces se acabo)

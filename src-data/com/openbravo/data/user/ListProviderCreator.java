@@ -16,7 +16,6 @@
 //
 //    You should have received a copy of the GNU General Public License
 //    along with Openbravo POS.  If not, see <http://www.gnu.org/licenses/>.
-
 package com.openbravo.data.user;
 
 import java.util.*;
@@ -25,23 +24,28 @@ import com.openbravo.basic.BasicException;
 import com.openbravo.data.loader.SentenceList;
 
 public class ListProviderCreator implements ListProvider {
-    
+
     private SentenceList sent;
     private EditorCreator prov;
     private Object params;
-    
-    /** Creates a new instance of ListProviderEditor */
+
+    /**
+     * Creates a new instance of ListProviderEditor
+     *
+     * @param sent
+     * @param prov
+     */
     public ListProviderCreator(SentenceList sent, EditorCreator prov) {
         this.sent = sent;
         this.prov = prov;
         params = null;
     }
-    
+
     public ListProviderCreator(SentenceList sent) {
         this(sent, null);
     }
-    
-    public ListProviderCreator(TableDefinition table) {        
+
+    public ListProviderCreator(TableDefinition table) {
         this(table.getListSentence(), null);
     }
 //    public ListProviderECreator(Connection c, ISQLBuilderStatic sqlbuilder, SerializerRead sr, SerializerWrite sw, EditorCreator prov) {
@@ -75,12 +79,22 @@ public class ListProviderCreator implements ListProvider {
 //        sent.setSerializerWrite(sw);
 //    }
 
-    public List loadData() throws BasicException {       
+    /**
+     *
+     * @return @throws BasicException
+     */
+    @Override
+    public List loadData() throws BasicException {
         params = (prov == null) ? null : prov.createValue();
         return refreshData();
     }
-    
+
+    /**
+     *
+     * @return @throws BasicException
+     */
+    @Override
     public List refreshData() throws BasicException {
         return sent.list(params);
-    }    
+    }
 }
