@@ -7,7 +7,6 @@ package com.openbravo.pos.validation;
 
 import com.openbravo.basic.BasicException;
 import com.openbravo.pos.forms.AppProperties;
-import com.openbravo.pos.ticket.TicketInfo;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -35,9 +34,8 @@ public class InvoiceValidation {
                 }
 
                 Class<?> clazz = Class.forName(validationClass);
-                Constructor<?> constructor = clazz.getDeclaredConstructor(new Class[]{TicketInfo.class});
-                invoiceValidation = (IInvoiceValidation) constructor.newInstance(new Object[]{m_props});
-
+                Constructor<?> constructor = clazz.getDeclaredConstructor();
+                invoiceValidation = (IInvoiceValidation) constructor.newInstance();
             }
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

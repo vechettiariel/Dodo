@@ -57,6 +57,10 @@ public class TicketInfo implements SerializableRead, Externalizable {
     private List<PaymentInfo> payments;
     private List<TicketTaxInfo> taxes;
     private UserInfo m_Seller;
+    private String caeNumber;
+    private Date caeExpiration;
+    private String tokenRequest;
+    private String tokenResponde;
 
     /**
      * Creates new TicketModel
@@ -475,6 +479,38 @@ public class TicketInfo implements SerializableRead, Externalizable {
 
     public String printTotalPaid() {
         return Formats.CURRENCY.formatValue(getTotalPaid());
+    }
+
+    public String getCaeNumber() {
+        return caeNumber;
+    }
+
+    public void setCaeNumber(String caeNumber) {
+        this.caeNumber = caeNumber;
+    }
+
+    public Date getCaeExpiration() {
+        return caeExpiration;
+    }
+
+    public void setCaeExpiration(Date caeExpiration) {
+        this.caeExpiration = caeExpiration;
+    }
+
+    public String getTokenRequest() {
+        return tokenRequest;
+    }
+
+    public void setTokenRequest(String tokenRequest) {
+        this.tokenRequest = tokenRequest;
+    }
+
+    public String getTokenResponde() {
+        return tokenResponde;
+    }
+
+    public void setTokenResponde(String tokenResponde) {
+        this.tokenResponde = tokenResponde;
     }
 
 }

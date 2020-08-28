@@ -325,7 +325,8 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                 });
 
                 // new ticket
-                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, POINTSALE, NUMBER, PERSON, CUSTOMER, SELLER) VALUES (?, ?, ?, ?, ?, ?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
+                new PreparedSentence(s, "INSERT INTO TICKETS (ID, TYPE, POINTSALE, NUMBER, PERSON, CUSTOMER, SELLER, CAE_NUMBER, CAE_EXPIRATION, TOKEN_RESQUEST,TOKEN_RESPONDE) "
+                        + " VALUES (?,?,?,?,?,?,?,?,?,?,?)", SerializerWriteParams.INSTANCE).exec(new DataParams() {
                     @Override
                     public void writeValues() throws BasicException {
                         setString(1, ticket.getId());
@@ -335,6 +336,10 @@ public class DataLogicSales extends BeanFactoryDataSingle {
                         setString(5, ticket.getUser().getId());
                         setString(6, ticket.getCustomerId());
                         setString(7, ticket.getSeller().getId());
+                        setString(8, ticket.getCaeNumber());
+                        setTimestamp(9, ticket.getCaeExpiration());
+                        setString(10, ticket.getTokenRequest());
+                        setString(11, ticket.getTokenResponde());
                     }
                 });
 

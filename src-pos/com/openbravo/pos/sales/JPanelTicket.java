@@ -51,6 +51,8 @@ import com.openbravo.pos.ticket.TicketLineInfo;
 import com.openbravo.pos.ticket.TicketTypeInfo;
 import com.openbravo.pos.util.JRPrinterAWT300;
 import com.openbravo.pos.util.ReportUtils;
+import com.openbravo.pos.validation.IInvoiceValidation;
+import com.openbravo.pos.validation.InvoiceValidation;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -914,6 +916,22 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                             // assign the payments selected and calculate taxes.
                             ticket.setPayments(paymentdialog.getSelectedPayments());
 
+                            /*
+                            Obtenemos la validacion del ticket si corresponde
+                             */
+                            IInvoiceValidation validation = InvoiceValidation.getValidation(m_App.getProperties());
+
+                            validation.validate(ticket);
+
+                            ticket.setNumber(validation.getNumber());
+                            ticket.setCaeNumber(validation.getCaeNumber());
+                            ticket.setCaeExpiration(validation.getCaeExpiration());
+                            ticket.setTokenRequest(validation.getTokenRequest());
+                            ticket.setTokenResponde(validation.getTokenResponde());
+
+                            /*
+                            Guardamos el ticket
+                             */
                             dlSales.saveTicket(ticket, m_App.getInventoryLocation());
 
                             executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
@@ -923,7 +941,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                     ? "Printer.Ticket"
                                     : "Printer.Ticket2", ticket, ticketext);
 
-                            resultok = false;
+                            resultok = true;
                         }
 
                     }
@@ -933,7 +951,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                 MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
                 msg.show(this);
             } catch (TaxesException e) {
-                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotcalculatetaxes"));
+                MessageInf msg = new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.cannotcalculatetaxes"), e);
                 msg.show(this);
                 resultok = false;
             }
